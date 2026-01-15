@@ -10,9 +10,29 @@ export type ModuleCategory =
   | 'decoration'
   | 'flooring';
 
+export interface CertifiedMaterial {
+  id: string;
+  name: string;
+  category: 'wood' | 'metal' | 'fabric' | 'glass' | 'plastic';
+  certification: string; // ex: FSC, PEFC, M1, Oeko-Tex
+  origin: string;
+  density: number; // kg/m² ou kg/m³
+  thickness?: number; // mm
+  pricePerUnit: number;
+  unit: 'm2' | 'm3' | 'linear';
+  pbr: {
+    color: string;
+    metalness: number;
+    roughness: number;
+    textureUrl?: string;
+  };
+  carbonFootprint: number; // kg CO2e / unit
+}
+
 export type ModuleMaterial = {
-  type: 'color' | 'texture' | 'material';
-  value: string; // hex color or texture URL or material name
+  type: 'color' | 'texture' | 'material' | 'certified';
+  value: string; // hex color or texture URL or material name or certifiedMaterialId
+  certifiedMaterialId?: string;
   metalness?: number;
   roughness?: number;
   opacity?: number;

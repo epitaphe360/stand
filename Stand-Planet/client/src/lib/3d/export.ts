@@ -1,37 +1,70 @@
 import { PlacedModule, StandConfiguration } from '@/types/modules';
+import { getCertifiedMaterialById } from './materials';
 
 /**
- * Génère une nomenclature (Bill of Materials) détaillée
+ * Génère une nomenclature (Bill of Materials) détaillée incluant matériaux et logistique
  */
 export const generateBOM = (config: StandConfiguration) => {
-  const summary: Record<string, { name: string; count: number; price: number; total: number }> = {};
+  const summary: Record<string, { 
+    name: string; 
+    count: number; 
+    price: number; 
+    total: number;
+    weight: number;
+    carbon: number;
+    materialName: string;
+    certification: string;
+  }> = {};
 
   config.modules.forEach((module) => {
+    const certifiedMat = module.material.type === 'certified' && module.material.certifiedMaterialId 
+      ? getCertifiedMaterialById(module.material.certifiedMaterialId) 
+      : null;
+
     if (!summary[module.id]) {
       summary[module.id] = {
         name: module.name,
         count: 0,
         price: module.price,
-        total: 0
+        total: 0,
+        weight: 0,
+        carbon: 0,
+        materialName: certifiedMat?.name || 'Standard',
+        certification: certifiedMat?.certification || 'N/A'
       };
     }
+
+    // Calcul de la surface pour les matériaux au m2
+    const surface = module.dimensions.width * module.dimensions.height; // Approximation pour murs/panneaux
+    
     summary[module.id].count += 1;
     summary[module.id].total += module.price;
+    summary[module.id].weight += (module.weight || 0) + (certifiedMat ? certifiedMat.density * surface : 0);
+    summary[module.id].carbon += certifiedMat ? certifiedMat.carbonFootprint * surface : 0;
   });
 
   return Object.values(summary);
 };
 
 /**
- * Génère un fichier CSV pour la nomenclature
+ * Génère un fichier CSV pour la nomenclature avec données industrielles
  */
 export const downloadBOMCSV = (config: StandConfiguration) => {
   const bom = generateBOM(config);
-  let csvContent = "ID;Nom;Quantité;Prix Unitaire;Total\n";
+  let csvContent = "Nom;Quantite;Materiau;Certification;Poids Total (kg);Bilan Carbone (kgCO2e);Prix Unitaire;Total\n";
   
+  let totalWeight = 0;
+  let totalCarbon = 0;
+  let totalPrice = 0;
+
   bom.forEach((item) => {
-    csvContent += `${item.name};${item.count};${item.price}€;${item.total}€\n`;
+    csvContent += `${item.name};${item.count};${item.materialName};${item.certification};${item.weight.toFixed(2)};${item.carbon.toFixed(2)};${item.price}€;${item.total}€\n`;
+    totalWeight += item.weight;
+    totalCarbon += item.carbon;
+    totalPrice += item.total;
   });
+
+  csvContent += `\nTOTAL;;;;${totalWeight.toFixed(2)} kg;${totalCarbon.toFixed(2)} kgCO2e;;${totalPrice}€\n`;
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement("a");
@@ -66,11 +99,18 @@ export const downloadCNCPlanSVG = (config: StandConfiguration) => {
     const w = module.dimensions.width * scale;
     const d = module.dimensions.depth * scale;
 
+    const certifiedMat = module.material.type === 'certified' && module.material.certifiedMaterialId 
+      ? getCertifiedMaterialById(module.material.certifiedMaterialId) 
+      : null;
+    
+    const thicknessLabel = certifiedMat?.thickness ? ` | Ep: ${certifiedMat.thickness}mm` : '';
+
     svgContent += `
       <g>
         <rect x="${x}" y="${z}" width="${w}" height="${d}" fill="rgba(59, 130, 246, 0.2)" stroke="blue" stroke-width="1" />
         <text x="${x + 5}" y="${z + 15}" font-size="10" fill="black">${module.name}</text>
-        <text x="${x + 5}" y="${z + 25}" font-size="8" fill="gray">${module.dimensions.width}x${module.dimensions.depth}m</text>
+        <text x="${x + 5}" y="${z + 25}" font-size="8" fill="gray">${module.dimensions.width}x${module.dimensions.depth}m${thicknessLabel}</text>
+        ${certifiedMat ? `<text x="${x + 5}" y="${z + 35}" font-size="7" fill="green">${certifiedMat.certification}</text>` : ''}
       </g>
     `;
   });

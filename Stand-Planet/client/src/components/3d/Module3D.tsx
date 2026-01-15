@@ -3,7 +3,7 @@ import { useFrame, ThreeEvent } from '@react-three/fiber';
 import { PlacedModule } from '@/types/modules';
 import { useStudioStore } from '@/store/useStudioStore';
 import * as THREE from 'three';
-import { getMaterialProps } from '@/lib/3d/materials';
+import { getMaterialProps, getCertifiedMaterialById } from '@/lib/3d/materials';
 import { RoundedBox } from '@react-three/drei'; // Import pour formes réalistes
 import GLTFLoader from './GLTFLoader';
 import { checkAABBCollision, getSnappedPosition, findNearestSnapPoint, canStack } from '@/lib/3d/collision';
@@ -101,6 +101,10 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
 
   // Couleur basée sur le matériau
   const getColor = () => {
+    if (module.material.type === 'certified' && module.material.certifiedMaterialId) {
+      const certified = getCertifiedMaterialById(module.material.certifiedMaterialId);
+      if (certified) return certified.pbr.color;
+    }
     if (module.material.type === 'color') {
       return module.material.value;
     }
@@ -124,6 +128,17 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
 
   // Propriétés du matériau
   const getBaseMaterialProps = () => {
+    if (module.material.type === 'certified' && module.material.certifiedMaterialId) {
+      const certified = getCertifiedMaterialById(module.material.certifiedMaterialId);
+      if (certified) {
+        return {
+          metalness: certified.pbr.metalness,
+          roughness: certified.pbr.roughness,
+          transparent: (module.material.opacity || 1) < 1,
+          opacity: getOpacity()
+        };
+      }
+    }
     return {
       metalness: module.material.metalness || 0.2,
       roughness: module.material.roughness || 0.8,
