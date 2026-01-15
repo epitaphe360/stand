@@ -4,7 +4,7 @@ import { OrbitControls, Grid, PerspectiveCamera, ContactShadows } from '@react-t
 import { EffectComposer, Bloom, SSAO, ToneMapping } from '@react-three/postprocessing';
 import { VRButton, XR } from '@react-three/xr';
 import { useStudioStore } from '@/store/useStudioStore';
-import { downloadBOMCSV, downloadCNCPlanSVG } from '@/lib/3d/export';
+import { downloadBOMCSV, downloadCNCPlanSVG, downloadCNC_DXF } from '@/lib/3d/export';
 import Module3D from './Module3D';
 import EnvironmentScene from './Environment';
 import { Suspense } from 'react';
@@ -185,7 +185,13 @@ export default function DragDropCanvas() {
             onClick={() => downloadCNCPlanSVG(currentConfiguration)}
             className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded flex items-center gap-2 transition-colors text-xs"
           >
-            <span>📐</span> Plan CNC (SVG)
+            <span>📐</span> Plan (SVG)
+          </button>
+          <button 
+            onClick={() => downloadCNC_DXF(currentConfiguration)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded flex items-center gap-2 transition-colors text-xs"
+          >
+            <span>⚙️</span> CNC (DXF)
           </button>
         </div>
       </div>

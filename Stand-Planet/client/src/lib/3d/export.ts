@@ -1,5 +1,6 @@
 import { PlacedModule, StandConfiguration } from '@/types/modules';
 import { getCertifiedMaterialById } from './materials';
+import { DXFGenerator, downloadDXF } from './dxf-generator';
 
 /**
  * Génère une nomenclature (Bill of Materials) détaillée incluant matériaux et logistique
@@ -125,11 +126,47 @@ export const downloadCNCPlanSVG = (config: StandConfiguration) => {
 
   const blob = new Blob([svgContent], { type: 'image/svg+xml' });
   const link = document.createElement("a");
-  const url = URL.createObjectURL(blob);
+  const url = URL.createObjectURL(bl  const url = URL.createObjectURL(blob);
   link.setAttribute("href", url);
-  link.setAttribute("download", `CNC_PLAN_${config.name.replace(/\s+/g, '_')}.svg`);
-  link.style.visibility = 'hidden';
+  link.setAttribute("download", `CNC_Plan_${config.name.replace(/\s+/g, '_')}.svg`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+};
+
+/**
+ * Génère et télécharge un plan CNC au format DXF industriel avec calques
+ */
+export const downloadCNC_DXF = (config: StandConfiguration) => {
+  const dxf = new DXFGenerator();
+  
+  config.modules.forEach((module) => {
+    const certifiedMat = module.material.type === 'certified' && module.material.certifiedMaterialId 
+      ? getCertifiedMaterialById(module.material.certifiedMaterialId) 
+      : null;
+
+    // Position relative au centre du stand
+    const x = module.position.x;
+    const y = module.position.z;
+    const w = module.dimensions.width;
+    const h = module.dimensions.depth;
+
+    // Calque de découpe (CUT) - Couleur Rouge (1)
+    dxf.addRect({
+      x, y, width: w, height: h,
+      layer: "CNC_CUT",
+      color: 1
+    });
+
+    // Marquage d'identification (ID) - Couleur Verte (3)
+    dxf.addText(x + 0.05, y + 0.05, `${module.name} [${module.instanceId.slice(0,4)}]`, "CNC_MARK", 0.05);
+    
+    // Information matériau - Couleur Bleue (5)
+    if (certifiedMat) {
+      dxf.addText(x + 0.05, y + 0.12, `${certifiedMat.name} (${certifiedMat.thickness}mm)`, "CNC_INFO", 0.03);
+    }
+  });
+
+  const content = dxf.generate();
+  downloadDXF(`CNC_Industrial_${config.name.replace(/\s+/g, '_')}.dxf`, content);
 };
