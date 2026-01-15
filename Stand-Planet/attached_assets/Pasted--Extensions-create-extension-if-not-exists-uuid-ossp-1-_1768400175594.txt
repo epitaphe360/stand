@@ -1,0 +1,99 @@
+-- Extensions
+create extension if not exists "uuid-ossp";
+
+-- 1. PROFILES
+create table public.profiles (
+  id uuid references auth.users on delete cascade not null primary key,
+  email text,
+  full_name text,
+  role text check (role in ('admin', 'organizer', 'exhibitor')),
+  company_name text,
+  avatar_url text,
+  updated_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 2. EVENTS
+create table public.events (
+  id uuid default uuid_generate_v4() primary key,
+  organizer_id uuid references public.profiles(id) not null,
+  name text not null,
+  description text,
+  venue_name text,
+  start_date date not null,
+  end_date date not null,
+  currency text default 'EUR',
+  status text default 'draft' check (status in ('draft', 'published', 'closed')),
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 3. HALLS
+create table public.halls (
+  id uuid default uuid_generate_v4() primary key,
+  event_id uuid references public.events(id) on delete cascade not null,
+  name text not null,
+  floor_plan_image_url text,
+  width_m float,
+  depth_m float,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 4. BOOTHS
+create table public.booths (
+  id uuid default uuid_generate_v4() primary key,
+  hall_id uuid references public.halls(id) on delete cascade not null,
+  booth_number text,
+  type text check (type in ('standard', 'corner', 'peninsula', 'island')),
+  coords jsonb not null default '{}', -- {x, y, w, h}
+  area_m2 float,
+  base_price decimal(12, 2),
+  status text default 'available' check (status in ('available', 'reserved', 'sold')),
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 5. CATALOG_ITEMS
+create table public.catalog_items (
+  id uuid default uuid_generate_v4() primary key,
+  name text not null,
+  category text, -- 'structure', 'furniture', 'av'
+  price decimal(10, 2) not null,
+  model_url text,
+  thumbnail_url text,
+  dimensions jsonb, -- {w, h, d} in meters
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 6. STAND_CONFIGURATIONS
+create table public.stand_configurations (
+  id uuid default uuid_generate_v4() primary key,
+  booth_id uuid references public.booths(id) not null,
+  exhibitor_id uuid references public.profiles(id) not null,
+  config_data jsonb not null default '{}', -- { walls: [], furniture: [] }
+  total_price decimal(12, 2),
+  is_finalized boolean default false,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 7. ORDERS
+create table public.orders (
+  id uuid default uuid_generate_v4() primary key,
+  config_id uuid references public.stand_configurations(id) not null,
+  amount decimal(12, 2) not null,
+  status text default 'pending' check (status in ('pending', 'paid', 'cancelled')),
+  stripe_session_id text,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- RLS POLICIES
+alter table public.profiles enable row level security;
+create policy "Public profiles viewable" on public.profiles for select using (true);
+create policy "Update own profile" on public.profiles for update using (auth.uid() = id);
+
+alter table public.events enable row level security;
+create policy "Organizers CRUD events" on public.events for all using (auth.uid() = organizer_id);
+create policy "View published events" on public.events for select using (status = 'published');
+
+alter table public.booths enable row level security;
+create policy "Organizers manage booths" on public.booths for all using (
+  exists (select 1 from public.halls h join public.events e on h.event_id = e.id where h.id = booths.hall_id and e.organizer_id = auth.uid())
+);
+create policy "View booths" on public.booths for select using (true);

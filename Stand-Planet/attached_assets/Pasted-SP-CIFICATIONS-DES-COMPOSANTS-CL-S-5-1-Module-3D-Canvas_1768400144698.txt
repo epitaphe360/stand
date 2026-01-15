@@ -1,0 +1,43 @@
+SPÉCIFICATIONS DES COMPOSANTS CLÉS
+5.1 Module 3D : Canvas & Scene (src/components/3d/)
+Canvas.tsx :
+Initialiser <Canvas> de @react-three/fiber.
+Configurer les lumières : <Environment preset="city" /> et <AmbientLight />.
+Configurer les ombres via <SoftShadows />.
+Intégrer <OrbitControls /> pour la navigation caméra (limité aux angles supérieurs).
+Recevoir la liste placedItems depuis le store.
+StandScene.tsx :
+Rendre le sol du stand (dimensionné selon currentBooth.coords converties en mètres).
+Itérer sur placedItems et charger les modèles .glb depuis Supabase en utilisant useGLTF.
+Utiliser <primitive object={gltf.scene} /> pour afficher les objets.
+Fonctionnalité Drag : Implémenter une logique simple permettant de déplacer les objets sur l'axe X/Z au sol.
+5.2 Module 2D : Floor Plan (src/components/2d/FloorPlan.tsx)
+Récupérer la liste des booths depuis Supabase pour un hall_id donné.
+Rendre une zone <svg> responsive.
+Pour chaque booth, dessiner un <rect> aux coordonnées booth.coords.
+Appliquer des classes Tailwind conditionnelles :
+Vert (fill-green-200) si status === 'available'.
+Rouge (fill-red-200) si status === 'sold'.
+Ajouter un événement onClick sur chaque stand pour déclencher useConfigStore.getState().setBooth(booth).
+5.3 Module UI : Interface de Configuration (src/pages/Exhibitor/Configurator.tsx)
+Layout :
+Gauche (25%) : Sidebar Liste des objets (CatalogSidebar). Liste des CatalogItem avec icône, nom et prix. Clic pour ajouter au centre de la scène.
+Centre (60%) : Le composant <Canvas />.
+Droite (15%) : Panier / Résumé. Liste des placedItems avec bouton supprimer. Affichage du Total Price (Prix stand m² + somme items). Bouton "Commander".
+6. ENVIRONNEMENT & CONFIGURATION
+Créer un fichier .env à la racine avec les variables suivantes (l'IA ne doit pas générer de fausses valeurs, mais laisser les placeholders) :
+
+env
+
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+7. INSTRUCTIONS D'EXÉCUTION POUR L'IA
+En tant qu'IA de développement, tu dois :
+
+Générer la structure de dossiers.
+Créer le fichier src/types/index.d.ts avec les interfaces.
+Configurer le client Supabase dans src/lib/supabase.ts.
+Créer le Store Zustand.
+Développer les composants 3D de base (Canvas, Scene).
+Développer le composant FloorPlan 2D (SVG).
+Créer la page de configuration assemblant le tout.
