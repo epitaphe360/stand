@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   Sparkles, Save, Download, Undo, Redo, Grid3x3, Eye, Settings,
-  Maximize2, PanelLeftClose, PanelRightClose, Play
+  Maximize2, PanelLeftClose, PanelRightClose, Play, Home
 } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import DragDropCanvas from '@/components/3d/DragDropCanvas';
 import ModulePicker from './ModulePicker';
@@ -14,6 +15,7 @@ import { useStudioStore } from '@/store/useStudioStore';
 import { Badge } from '@/components/ui/badge';
 
 export default function StandStudio() {
+  const [, setLocation] = useLocation();
   const {
     currentConfiguration,
     isAIAssistantOpen,
@@ -60,6 +62,17 @@ export default function StandStudio() {
         <div className="flex items-center justify-between px-4 py-3">
           {/* Left Section */}
           <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setLocation('/')}
+              className="hover:bg-gray-100"
+            >
+              <Home className="w-5 h-5 text-gray-600" />
+            </Button>
+
+            <div className="h-8 w-px bg-gray-200" />
+
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                 Stand Studio

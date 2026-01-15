@@ -13,6 +13,7 @@ import Dashboard from "@/pages/Organizer/Dashboard";
 import BoothConfigurator from "@/pages/Exhibitor/BoothConfigurator";
 import StudioHome from "@/pages/StudioHome";
 import StandStudio from "@/components/studio/StandStudio";
+import LandingPage from "@/pages/LandingPage";
 
 // Route Guard Wrapper (Simplified for this generation)
 // Ideally, use a proper AuthGuard component that checks role
@@ -20,12 +21,10 @@ import StandStudio from "@/components/studio/StandStudio";
 function Router() {
   return (
     <Switch>
-      {/* Redirect root to Studio */}
-      <Route path="/">
-        {() => <Redirect to="/studio" />}
-      </Route>
+      {/* Landing Page - Présentation de l'application */}
+      <Route path="/" component={LandingPage} />
 
-      {/* Stand Studio - Route principale */}
+      {/* Stand Studio - Route principale (Configurateur) */}
       <Route path="/studio" component={StandStudio} />
       <Route path="/studio/home" component={StudioHome} />
 
