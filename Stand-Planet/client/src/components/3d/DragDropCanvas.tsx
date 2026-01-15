@@ -1,6 +1,8 @@
 // Canvas 3D interactif avec drag & drop
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Grid, PerspectiveCamera, ContactShadows } from '@react-three/drei';
+import { EffectComposer, Bloom, SSAO, ToneMapping } from '@react-three/postprocessing';
+import { VRButton, XR } from '@react-three/xr';
 import { useStudioStore } from '@/store/useStudioStore';
 import Module3D from './Module3D';
 import EnvironmentScene from './Environment';
@@ -19,9 +21,11 @@ export default function DragDropCanvas() {
   const { width, depth } = currentConfiguration.dimensions;
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800">
+    <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 relative">
+      <VRButton />
       <Canvas shadows dpr={[1, 2]} gl={{ antialias: true, alpha: false }}>
-        <Suspense fallback={null}>
+        <XR>
+          <Suspense fallback={null}>
           {/* Caméra */}
           <PerspectiveCamera makeDefault position={[8, 6, 8]} fov={50} />
           
@@ -108,7 +112,32 @@ export default function DragDropCanvas() {
               onSelect={() => selectModule(module.instanceId)}
             />
           ))}
+
+          {/* Post-Processing pour le photoréalisme */}
+          <EffectComposer disableNormalPass>
+            <SSAO 
+              intensity={1.5}
+              radius={0.4}
+              luminanceInfluence={0.5}
+              color="black"
+            />
+            <Bloom 
+              intensity={0.5}
+              luminanceThreshold={1}
+              luminanceSmoothing={0.9}
+              mipmapBlur
+            />
+            <ToneMapping 
+              adaptive={true}
+              resolution={256}
+              middleGrey={0.6}
+              maxLuminance={16.0}
+              averageLuminance={1.0}
+              adaptationRate={1.0}
+            />
+          </EffectComposer>
         </Suspense>
+        </XR>
       </Canvas>
 
       {/* Overlay d'informations */}
