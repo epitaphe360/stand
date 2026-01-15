@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFrame, ThreeEvent } from '@react-three/fiber';
 import { PlacedModule } from '@/types/modules';
 import { useStudioStore } from '@/store/useStudioStore';
@@ -6,7 +6,11 @@ import * as THREE from 'three';
 import { getMaterialProps, getCertifiedMaterialById } from '@/lib/3d/materials';
 import { RoundedBox } from '@react-three/drei'; // Import pour formes réalistes
 import GLTFLoader from './GLTFLoader';
+import LightModule3D from './LightModule3D';
+import ScreenModule3D from './ScreenModule3D';
+import MultiLevelModule3D from './MultiLevelModule3D';
 import { checkAABBCollision, getSnappedPosition, findNearestSnapPoint, canStack } from '@/lib/3d/collision';
+import { loadAssetTexture } from '@/lib/3d/texture-loader';
 
 interface Module3DProps {
   module: PlacedModule;
@@ -1415,6 +1419,21 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
     }
   };
 
+  // Si c'est un module d'éclairage avec lightConfig, utiliser le composant spécialisé
+  if (module.category === 'lighting' && (module as any).lightConfig) {
+    return <LightModule3D module={module} isSelected={isSelected} />;
+  }
+
+  // Si c'est un écran multimédia
+  if (module.category === 'multimedia' && module.id.startsWith('multi-')) {
+    return <ScreenModule3D module={module} isSelected={isSelected} />;
+  }
+
+  // Si c'est une structure multi-niveaux (plateforme, escalier, garde-corps)
+  if (module.id.startsWith('level-')) {
+    return <MultiLevelModule3D module={module} isSelected={isSelected} />;
+  }
+
   return (
     <group
       position={[module.position.x, module.position.y + module.dimensions.height / 2, module.position.z]}
@@ -1422,7 +1441,7 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
       scale={[module.scale.x, module.scale.y, module.scale.z]}
     >
       {renderDetailedModule()}
-      
+
       {/* Outline pour sélection */}
       {(isSelected || hovered) && (
         <mesh>

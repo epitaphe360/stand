@@ -124,6 +124,25 @@ export interface ModuleBase {
     shadowMapSize?: number;
   };
 
+  // Configuration multi-niveaux (pour plateformes, mezzanines)
+  levelConfig?: {
+    type: 'platform' | 'mezzanine' | 'podium';
+    height: number;
+    hasRailing: boolean;
+    hasStairs: boolean;
+    stairPosition?: 'front' | 'back' | 'left' | 'right' | 'side';
+    capacity: number; // Charge maximale en kg
+  };
+
+  // Configuration escalier
+  stairConfig?: {
+    steps: number;
+    stepHeight: number;
+    stepDepth: number;
+    width: number;
+    hasHandrail: boolean;
+  };
+
   // Propriétés personnalisables
   customizable: {
     dimensions: boolean;

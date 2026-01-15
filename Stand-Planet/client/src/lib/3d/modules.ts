@@ -355,6 +355,7 @@ export const PLV: ModuleBase[] = [
 // === ÉCLAIRAGE ===
 // Import des modules d'éclairage professionnels
 import { LIGHTING_MODULES } from './lighting-modules';
+import { MULTI_LEVEL_MODULES } from './multi-level';
 
 export const LIGHTING: ModuleBase[] = LIGHTING_MODULES;
 
@@ -607,6 +608,7 @@ export const FLOORING: ModuleBase[] = [
 // Export de tous les modules
 export const ALL_MODULES: ModuleBase[] = [
   ...STRUCTURES,
+  ...MULTI_LEVEL_MODULES, // Plateformes, escaliers, garde-corps
   ...WALLS,
   ...FURNITURE,
   ...LIGHTING,
