@@ -112,6 +112,69 @@ export type InsertEvent = z.infer<typeof insertEventSchema>;
 export type InsertBooth = z.infer<typeof insertBoothSchema>;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
 
+// === ASSETS (Logos, Images, Textures) ===
+
+export const assets = sqliteTable("assets", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  type: text("type", {
+    enum: ["logo", "image", "texture", "video", "document"]
+  }).notNull(),
+  name: text("name").notNull(),
+  fileName: text("file_name").notNull(),
+  filePath: text("file_path").notNull(),
+  fileSize: integer("file_size").notNull(),
+  mimeType: text("mime_type").notNull(),
+  width: integer("width"),
+  height: integer("height"),
+  url: text("url").notNull(),
+  thumbnailUrl: text("thumbnail_url"),
+  metadata: text("metadata"),
+  tags: text("tags"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+});
+
+export const moduleAssets = sqliteTable("module_assets", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  boothId: integer("booth_id").references(() => booths.id).notNull(),
+  moduleInstanceId: text("module_instance_id").notNull(),
+  assetId: integer("asset_id").references(() => assets.id).notNull(),
+  face: text("face", {
+    enum: ["front", "back", "left", "right", "top", "bottom", "all"]
+  }).default("front"),
+  position: text("position"),
+  opacity: integer("opacity").default(100),
+  repeat: text("repeat", {
+    enum: ["no-repeat", "repeat", "repeat-x", "repeat-y"]
+  }).default("no-repeat"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
+});
+
+// Relations pour assets
+export const assetsRelations = relations(assets, ({ one }) => ({
+  user: one(users, {
+    fields: [assets.userId],
+    references: [users.id],
+  }),
+}));
+
+export const insertAssetSchema = createInsertSchema(assets).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+
+export const insertModuleAssetSchema = createInsertSchema(moduleAssets).omit({
+  id: true,
+  createdAt: true
+});
+
+export type Asset = typeof assets.$inferSelect;
+export type InsertAsset = z.infer<typeof insertAssetSchema>;
+export type ModuleAsset = typeof moduleAssets.$inferSelect;
+export type InsertModuleAsset = z.infer<typeof insertModuleAssetSchema>;
+
 // API Types
 export type LoginRequest = { email: string; password: string };
 export type AuthResponse = { user: User; token?: string };

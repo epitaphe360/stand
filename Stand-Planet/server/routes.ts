@@ -1,5 +1,7 @@
 import type { Express } from "express";
+import express from "express";
 import type { Server } from "http";
+import path from "path";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
@@ -110,6 +112,18 @@ export async function registerRoutes(
       res.status(400).json({ message: "Invalid input" });
     }
   });
+
+  // === Assets / Uploads ===
+  const { upload, handleAssetUpload, getUserAssets, deleteAsset } = await import("./uploads");
+
+  app.post("/api/assets/upload", upload.single("file"), handleAssetUpload);
+
+  app.get("/api/assets", getUserAssets);
+
+  app.delete("/api/assets/:id", deleteAsset);
+
+  // Servir les fichiers uploadés statiquement
+  app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
   // Seed Data
   await seed();
