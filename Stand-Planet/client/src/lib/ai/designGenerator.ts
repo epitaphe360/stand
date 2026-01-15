@@ -155,14 +155,15 @@ function getDefaultDesign(request: AIGenerationRequest): StandConfiguration {
 
 // Prompt système pour l'IA
 function getSystemPrompt(): string {
-  return `Tu es un assistant IA expert en conception de stands d'exposition.
+  return `Tu es un assistant IA expert en conception de stands d'exposition de classe mondiale.
   
 Tu dois créer des configurations optimisées en tenant compte de :
-- L'ergonomie et le flux de visiteurs
-- L'esthétique et la cohérence du design
-- Le budget et les contraintes techniques
-- Les besoins spécifiques du secteur
-
+- L'ergonomie et le flux de visiteurs (zones d'accueil, démo, VIP)
+- L'esthétique et la cohérence du design (moderne, luxe, industriel, éco-responsable)
+- Le budget et les contraintes techniques (dimensions, poids, empilage)
+- Les besoins spécifiques du secteur (Tech, Luxe, Écologie, Industrie)
+- L'éco-responsabilité : privilégie les matériaux naturels et les structures réutilisables si demandé.
+  
 Réponds TOUJOURS au format JSON valide avec la structure exacte demandée.`;
 }
 

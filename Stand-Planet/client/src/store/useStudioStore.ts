@@ -2,8 +2,15 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { PlacedModule, StandConfiguration, DesignHistoryItem, ModuleBase } from '@/types/modules';
+import { io, Socket } from 'socket.io-client';
 
 interface StudioState {
+  // Collaboration
+  socket: Socket | null;
+  roomId: string | null;
+  connectCollaboration: (roomId: string) => void;
+  disconnectCollaboration: () => void;
+
   // Configuration actuelle
   currentConfiguration: StandConfiguration;
   
@@ -101,6 +108,41 @@ export const useStudioStore = create<StudioState>()(
         isModuleLibraryOpen: true,
         isPropertiesPanelOpen: true,
         environmentPreset: 'studio',
+        socket: null,
+        roomId: null,
+
+        connectCollaboration: (roomId) => {
+          const socket = io(window.location.origin);
+          socket.emit('join-room', roomId);
+
+          socket.on('module-updated', (data) => {
+            set((state) => ({
+              placedModules: state.placedModules.map(m =>
+                m.instanceId === data.instanceId ? { ...m, ...data.updates } : m
+              )
+            }));
+          });
+
+          socket.on('module-added', (data) => {
+            set((state) => ({
+              placedModules: [...state.placedModules, data.module]
+            }));
+          });
+
+          socket.on('module-removed', (data) => {
+            set((state) => ({
+              placedModules: state.placedModules.filter(m => m.instanceId !== data.instanceId)
+            }));
+          });
+
+          set({ socket, roomId });
+        },
+
+        disconnectCollaboration: () => {
+          const { socket } = get();
+          if (socket) socket.disconnect();
+          set({ socket: null, roomId: null });
+        },
 
         setEnvironmentPreset: (preset: any) => set({ environmentPreset: preset }),
 
@@ -124,6 +166,11 @@ export const useStudioStore = create<StudioState>()(
             selectedModuleId: instanceId
           }));
 
+          const { socket, roomId } = get();
+          if (socket && roomId) {
+            socket.emit('add-module', { roomId, module: placedModule });
+          }
+
           get().addToHistory('add', `Ajout de ${module.name}`);
         },
 
@@ -137,6 +184,11 @@ export const useStudioStore = create<StudioState>()(
             selectedModuleId: state.selectedModuleId === instanceId ? null : state.selectedModuleId
           }));
 
+          const { socket, roomId } = get();
+          if (socket && roomId) {
+            socket.emit('remove-module', { roomId, instanceId });
+          }
+
           get().addToHistory('remove', `Suppression de ${module.name}`);
         },
 
@@ -147,6 +199,11 @@ export const useStudioStore = create<StudioState>()(
               m.instanceId === instanceId ? { ...m, ...updates } : m
             )
           }));
+
+          const { socket, roomId } = get();
+          if (socket && roomId) {
+            socket.emit('update-module', { roomId, instanceId, updates });
+          }
         },
 
         // Sélectionner un module

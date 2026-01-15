@@ -4,11 +4,15 @@ import { OrbitControls, Grid, PerspectiveCamera, ContactShadows } from '@react-t
 import { EffectComposer, Bloom, SSAO, ToneMapping } from '@react-three/postprocessing';
 import { VRButton, XR } from '@react-three/xr';
 import { useStudioStore } from '@/store/useStudioStore';
+import { downloadBOMCSV, downloadCNCPlanSVG } from '@/lib/3d/export';
 import Module3D from './Module3D';
 import EnvironmentScene from './Environment';
 import { Suspense } from 'react';
 
+import { useMobile } from '@/hooks/use-mobile';
+
 export default function DragDropCanvas() {
+  const isMobile = useMobile();
   const {
     placedModules,
     currentConfiguration,
@@ -17,7 +21,10 @@ export default function DragDropCanvas() {
     selectModule,
     selectedModuleId,
     environmentPreset,
-    setEnvironmentPreset
+    setEnvironmentPreset,
+    connectCollaboration,
+    disconnectCollaboration,
+    roomId
   } = useStudioStore();
 
   const { width, depth } = currentConfiguration.dimensions;
@@ -25,7 +32,11 @@ export default function DragDropCanvas() {
   return (
     <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 relative">
       <VRButton />
-      <Canvas shadows dpr={[1, 2]} gl={{ antialias: true, alpha: false }}>
+      <Canvas 
+        shadows={!isMobile} 
+        dpr={isMobile ? 1 : [1, 2]} 
+        gl={{ antialias: !isMobile, alpha: false }}
+      >
         <XR>
           <Suspense fallback={null}>
           {/* Caméra */}
@@ -115,29 +126,31 @@ export default function DragDropCanvas() {
             />
           ))}
 
-          {/* Post-Processing pour le photoréalisme */}
-          <EffectComposer disableNormalPass>
-            <SSAO 
-              intensity={1.5}
-              radius={0.4}
-              luminanceInfluence={0.5}
-              color="black"
-            />
-            <Bloom 
-              intensity={0.5}
-              luminanceThreshold={1}
-              luminanceSmoothing={0.9}
-              mipmapBlur
-            />
-            <ToneMapping 
-              adaptive={true}
-              resolution={256}
-              middleGrey={0.6}
-              maxLuminance={16.0}
-              averageLuminance={1.0}
-              adaptationRate={1.0}
-            />
-          </EffectComposer>
+          {/* Post-Processing optimisé (désactivé sur mobile pour fluidité) */}
+          {!isMobile && (
+            <EffectComposer disableNormalPass>
+              <SSAO 
+                intensity={1.5}
+                radius={0.4}
+                luminanceInfluence={0.5}
+                color="black"
+              />
+              <Bloom 
+                intensity={0.5}
+                luminanceThreshold={1}
+                luminanceSmoothing={0.9}
+                mipmapBlur
+              />
+              <ToneMapping 
+                adaptive={true}
+                resolution={256}
+                middleGrey={0.6}
+                maxLuminance={16.0}
+                averageLuminance={1.0}
+                adaptationRate={1.0}
+              />
+            </EffectComposer>
+          )}
         </Suspense>
         </XR>
       </Canvas>
@@ -150,18 +163,67 @@ export default function DragDropCanvas() {
         <p className="flex items-center gap-2"><span className="text-yellow-400">👆</span> Clic sur module : Sélectionner</p>
       </div>
 
-      {/* Stats du stand */}
-      <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-lg text-sm space-y-1 shadow-xl">
-        <p className="font-semibold text-blue-300">Stand: {width}m x {depth}m</p>
-        <p>Modules: {placedModules.length}</p>
-        <p className="font-semibold text-green-300">
-          Prix: {placedModules.reduce((sum, m) => sum + m.price, 0).toFixed(0)}€
-        </p>
+      {/* Stats & Exports */}
+      <div className="absolute top-4 right-4 flex flex-col gap-4">
+        <div className="bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-lg text-sm space-y-1 shadow-xl">
+          <p className="font-semibold text-blue-300">Stand: {width}m x {depth}m</p>
+          <p>Modules: {placedModules.length}</p>
+          <p className="font-semibold text-green-300">
+            Prix: {placedModules.reduce((sum, m) => sum + m.price, 0).toFixed(0)}€
+          </p>
+        </div>
+
+        <div className="bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-lg text-sm shadow-xl flex flex-col gap-2">
+          <p className="font-semibold text-orange-300 border-b border-white/20 pb-1 mb-1">Export Technique</p>
+          <button 
+            onClick={() => downloadBOMCSV(currentConfiguration)}
+            className="bg-orange-600 hover:bg-orange-700 text-white px-3 py-1.5 rounded flex items-center gap-2 transition-colors text-xs"
+          >
+            <span>📊</span> Nomenclature (BOM)
+          </button>
+          <button 
+            onClick={() => downloadCNCPlanSVG(currentConfiguration)}
+            className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded flex items-center gap-2 transition-colors text-xs"
+          >
+            <span>📐</span> Plan CNC (SVG)
+          </button>
+        </div>
       </div>
 
-      {/* Sélecteur d'environnement HDR */}
-      <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-lg text-sm shadow-xl flex flex-col gap-2">
-        <p className="font-semibold text-purple-300 border-b border-white/20 pb-1 mb-1">Ambiance Lumineuse</p>
+      {/* Collaboration & Environnement */}
+      <div className="absolute top-4 left-4 flex flex-col gap-4">
+        {/* Bouton Collaboration */}
+        <div className="bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-lg text-sm shadow-xl flex flex-col gap-2">
+          <p className="font-semibold text-blue-300 border-b border-white/20 pb-1 mb-1">Collaboration Mondiale</p>
+          {!roomId ? (
+            <button 
+              onClick={() => connectCollaboration('stand-global-1')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded flex items-center gap-2 transition-colors"
+            >
+              <span>🌐</span> Activer le mode Multijoueur
+            </button>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-green-400">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                En ligne (Room: {roomId})
+              </div>
+              <button 
+                onClick={disconnectCollaboration}
+                className="bg-red-600/50 hover:bg-red-600 text-white px-3 py-1 rounded text-xs transition-colors"
+              >
+                Quitter la session
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Sélecteur d'environnement HDR */}
+        <div className="bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-lg text-sm shadow-xl flex flex-col gap-2">
+          <p className="font-semibold text-purple-300 border-b border-white/20 pb-1 mb-1">Ambiance Lumineuse</p>
         <div className="grid grid-cols-2 gap-2">
           {[
             { id: 'studio', label: 'Studio Photo', icon: '📸' },

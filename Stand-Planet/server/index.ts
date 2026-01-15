@@ -2,9 +2,42 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import { Server } from "socket.io";
 
 const app = express();
 const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
+
+// Gestion de la collaboration en temps réel
+io.on("connection", (socket) => {
+  log(`Nouvelle connexion collaborative : ${socket.id}`);
+
+  socket.on("join-room", (roomId) => {
+    socket.join(roomId);
+    log(`Utilisateur ${socket.id} a rejoint le stand : ${roomId}`);
+  });
+
+  socket.on("update-module", (data) => {
+    socket.to(data.roomId).emit("module-updated", data);
+  });
+
+  socket.on("add-module", (data) => {
+    socket.to(data.roomId).emit("module-added", data);
+  });
+
+  socket.on("remove-module", (data) => {
+    socket.to(data.roomId).emit("module-removed", data);
+  });
+
+  socket.on("disconnect", () => {
+    log(`Déconnexion collaborative : ${socket.id}`);
+  });
+});
 
 declare module "http" {
   interface IncomingMessage {
