@@ -107,7 +107,23 @@ export interface ModuleBase {
   
   // Variantes disponibles (couleurs, finitions)
   variants?: ModuleVariant[];
-  
+
+  // Configuration d'éclairage (pour modules de type lighting)
+  lightConfig?: {
+    type: 'spot' | 'point' | 'directional' | 'rect' | 'tube';
+    color: string;
+    intensity: number;
+    distance?: number;
+    angle?: number;
+    penumbra?: number;
+    decay?: number;
+    width?: number;
+    height?: number;
+    radius?: number;
+    castShadow: boolean;
+    shadowMapSize?: number;
+  };
+
   // Propriétés personnalisables
   customizable: {
     dimensions: boolean;
