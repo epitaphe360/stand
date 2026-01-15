@@ -143,6 +143,24 @@ export interface ModuleBase {
     hasHandrail: boolean;
   };
 
+  // Configuration courbe (pour murs courbes, comptoirs arrondis, arches)
+  curveConfig?: {
+    type: 'arc' | 'bezier' | 'circular' | 'spline' | 'custom';
+    radius?: number;
+    startAngle?: number;
+    endAngle?: number;
+    controlPoints?: Array<{ x: number; y: number; z: number }>;
+    extrudeDepth?: number;
+    extrudeHeight?: number;
+    bevelEnabled?: boolean;
+    bevelThickness?: number;
+    bevelSize?: number;
+    tubularSegments?: number;
+    radialSegments?: number;
+    tubeRadius?: number;
+    closed?: boolean;
+  };
+
   // Propriétés personnalisables
   customizable: {
     dimensions: boolean;

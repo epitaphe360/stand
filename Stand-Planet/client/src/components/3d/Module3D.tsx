@@ -9,6 +9,7 @@ import GLTFLoader from './GLTFLoader';
 import LightModule3D from './LightModule3D';
 import ScreenModule3D from './ScreenModule3D';
 import MultiLevelModule3D from './MultiLevelModule3D';
+import CurvedModule3D from './CurvedModule3D';
 import { checkAABBCollision, getSnappedPosition, findNearestSnapPoint, canStack } from '@/lib/3d/collision';
 import { loadAssetTexture } from '@/lib/3d/texture-loader';
 
@@ -1432,6 +1433,11 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
   // Si c'est une structure multi-niveaux (plateforme, escalier, garde-corps)
   if (module.id.startsWith('level-')) {
     return <MultiLevelModule3D module={module} isSelected={isSelected} />;
+  }
+
+  // Si c'est un module courbe (murs courbes, comptoirs arrondis, arches)
+  if (module.id.startsWith('curve-') || (module as any).curveConfig) {
+    return <CurvedModule3D module={module} isSelected={isSelected} />;
   }
 
   return (
