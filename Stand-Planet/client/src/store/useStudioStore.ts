@@ -29,6 +29,7 @@ interface StudioState {
   isAIAssistantOpen: boolean;
   isModuleLibraryOpen: boolean;
   isPropertiesPanelOpen: boolean;
+  environmentPreset: 'city' | 'studio' | 'apartment' | 'lobby' | 'night' | 'warehouse' | 'forest';
   
   // Actions
   addModule: (module: ModuleBase, position?: { x: number; y: number; z: number }) => void;
@@ -63,6 +64,7 @@ interface StudioState {
   setCameraPosition: (position: [number, number, number]) => void;
   setCameraTarget: (target: [number, number, number]) => void;
   resetCamera: () => void;
+  setEnvironmentPreset: (preset: 'city' | 'studio' | 'apartment' | 'lobby' | 'night' | 'warehouse' | 'forest') => void;
   
   // Prix total
   getTotalPrice: () => number;
@@ -98,6 +100,9 @@ export const useStudioStore = create<StudioState>()(
         isAIAssistantOpen: false,
         isModuleLibraryOpen: true,
         isPropertiesPanelOpen: true,
+        environmentPreset: 'studio',
+
+        setEnvironmentPreset: (preset: any) => set({ environmentPreset: preset }),
 
         // Ajouter un module
         addModule: (module, position) => {

@@ -15,7 +15,9 @@ export default function DragDropCanvas() {
     snapToGrid,
     gridSize,
     selectModule,
-    selectedModuleId
+    selectedModuleId,
+    environmentPreset,
+    setEnvironmentPreset
   } = useStudioStore();
 
   const { width, depth } = currentConfiguration.dimensions;
@@ -155,6 +157,34 @@ export default function DragDropCanvas() {
         <p className="font-semibold text-green-300">
           Prix: {placedModules.reduce((sum, m) => sum + m.price, 0).toFixed(0)}€
         </p>
+      </div>
+
+      {/* Sélecteur d'environnement HDR */}
+      <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white px-4 py-3 rounded-lg text-sm shadow-xl flex flex-col gap-2">
+        <p className="font-semibold text-purple-300 border-b border-white/20 pb-1 mb-1">Ambiance Lumineuse</p>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { id: 'studio', label: 'Studio Photo', icon: '📸' },
+            { id: 'lobby', label: 'Hall Expo', icon: '🏢' },
+            { id: 'city', label: 'Urbain', icon: '🏙️' },
+            { id: 'warehouse', label: 'Entrepôt', icon: '🏭' },
+            { id: 'night', label: 'Nuit', icon: '🌙' },
+            { id: 'forest', label: 'Extérieur', icon: '🌳' }
+          ].map((preset) => (
+            <button
+              key={preset.id}
+              onClick={() => setEnvironmentPreset(preset.id as any)}
+              className={`flex items-center gap-2 px-2 py-1 rounded transition-colors ${
+                environmentPreset === preset.id 
+                  ? 'bg-purple-600 text-white' 
+                  : 'bg-white/10 hover:bg-white/20 text-gray-300'
+              }`}
+            >
+              <span>{preset.icon}</span>
+              <span className="text-xs">{preset.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

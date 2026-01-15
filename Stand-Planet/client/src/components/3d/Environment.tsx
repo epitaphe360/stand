@@ -1,8 +1,10 @@
 // Environnement 3D réaliste pour le stand
-import { Environment as DreiEnvironment, ContactShadows, Grid, useTexture } from '@react-three/drei';
-import * as THREE from 'three';
+import { Environment as DreiEnvironment, ContactShadows, Grid } from '@react-three/drei';
+import { useStudioStore } from '@/store/useStudioStore';
 
 export default function Environment() {
+  const { environmentPreset } = useStudioStore();
+
   return (
     <>
       {/* Éclairage Studio Professionnel */}
@@ -50,8 +52,8 @@ export default function Environment() {
         color="#000000"
       />
 
-      {/* Environnement HDRI pour reflets réalistes */}
-      <DreiEnvironment preset="studio" background={false} />
+      {/* Environnement HDRI dynamique pour reflets réalistes */}
+      <DreiEnvironment preset={environmentPreset} background={false} />
     </>
   );
 }
