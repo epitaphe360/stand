@@ -107,7 +107,60 @@ export interface ModuleBase {
   
   // Variantes disponibles (couleurs, finitions)
   variants?: ModuleVariant[];
-  
+
+  // Configuration d'éclairage (pour modules de type lighting)
+  lightConfig?: {
+    type: 'spot' | 'point' | 'directional' | 'rect' | 'tube';
+    color: string;
+    intensity: number;
+    distance?: number;
+    angle?: number;
+    penumbra?: number;
+    decay?: number;
+    width?: number;
+    height?: number;
+    radius?: number;
+    castShadow: boolean;
+    shadowMapSize?: number;
+  };
+
+  // Configuration multi-niveaux (pour plateformes, mezzanines)
+  levelConfig?: {
+    type: 'platform' | 'mezzanine' | 'podium';
+    height: number;
+    hasRailing: boolean;
+    hasStairs: boolean;
+    stairPosition?: 'front' | 'back' | 'left' | 'right' | 'side';
+    capacity: number; // Charge maximale en kg
+  };
+
+  // Configuration escalier
+  stairConfig?: {
+    steps: number;
+    stepHeight: number;
+    stepDepth: number;
+    width: number;
+    hasHandrail: boolean;
+  };
+
+  // Configuration courbe (pour murs courbes, comptoirs arrondis, arches)
+  curveConfig?: {
+    type: 'arc' | 'bezier' | 'circular' | 'spline' | 'custom';
+    radius?: number;
+    startAngle?: number;
+    endAngle?: number;
+    controlPoints?: Array<{ x: number; y: number; z: number }>;
+    extrudeDepth?: number;
+    extrudeHeight?: number;
+    bevelEnabled?: boolean;
+    bevelThickness?: number;
+    bevelSize?: number;
+    tubularSegments?: number;
+    radialSegments?: number;
+    tubeRadius?: number;
+    closed?: boolean;
+  };
+
   // Propriétés personnalisables
   customizable: {
     dimensions: boolean;

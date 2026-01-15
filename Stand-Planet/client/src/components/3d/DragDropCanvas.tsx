@@ -9,10 +9,10 @@ import Module3D from './Module3D';
 import EnvironmentScene from './Environment';
 import { Suspense } from 'react';
 
-import { useMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function DragDropCanvas() {
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const {
     placedModules,
     currentConfiguration,
@@ -254,6 +254,7 @@ export default function DragDropCanvas() {
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }

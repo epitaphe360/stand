@@ -353,60 +353,12 @@ export const PLV: ModuleBase[] = [
 ];
 
 // === ÉCLAIRAGE ===
-export const LIGHTING: ModuleBase[] = [
-  {
-    id: 'light-001',
-    name: 'Spot LED Encastré',
-    category: 'lighting',
-    description: 'Spot LED orientable',
-    thumbnailUrl: '/modules/lighting/spot.png',
-    dimensions: { width: 0.15, height: 0.2, depth: 0.15 },
-    defaultMaterial: { type: 'color', value: '#ffffff' },
-    price: 50,
-    tags: ['spot', 'led', 'ceiling'],
-    meshType: 'cylinder',
-    customizable: { dimensions: false, material: false, color: false }
-  },
-  {
-    id: 'light-002',
-    name: 'Bandeau LED',
-    category: 'lighting',
-    description: 'Barre LED RGB programmable',
-    thumbnailUrl: '/modules/lighting/led-strip.png',
-    dimensions: { width: 2, height: 0.05, depth: 0.05 },
-    defaultMaterial: { type: 'color', value: '#00ffff' },
-    price: 150,
-    tags: ['led', 'strip', 'rgb', 'modern'],
-    meshType: 'box',
-    customizable: { dimensions: true, material: false, color: true }
-  },
-  {
-    id: 'light-003',
-    name: 'Suspension Design',
-    category: 'lighting',
-    description: 'Luminaire suspendu moderne',
-    thumbnailUrl: '/modules/lighting/pendant.png',
-    dimensions: { width: 0.5, height: 1.5, depth: 0.5 },
-    defaultMaterial: { type: 'color', value: '#f39c12', metalness: 0.8, roughness: 0.2 },
-    price: 250,
-    tags: ['pendant', 'design', 'premium'],
-    meshType: 'sphere',
-    customizable: { dimensions: false, material: true, color: true }
-  },
-  {
-    id: 'light-004',
-    name: 'Projecteur Sol',
-    category: 'lighting',
-    description: 'Projecteur au sol pour éclairage d\'accentuation',
-    thumbnailUrl: '/modules/lighting/floor-light.png',
-    dimensions: { width: 0.3, height: 0.4, depth: 0.3 },
-    defaultMaterial: { type: 'color', value: '#2c3e50', metalness: 0.6, roughness: 0.4 },
-    price: 180,
-    tags: ['floor', 'spotlight', 'accent'],
-    meshType: 'cylinder',
-    customizable: { dimensions: false, material: false, color: false }
-  }
-];
+// Import des modules d'éclairage professionnels
+import { LIGHTING_MODULES } from './lighting-modules';
+import { MULTI_LEVEL_MODULES } from './multi-level';
+import { CURVED_MODULES } from './curved-modules';
+
+export const LIGHTING: ModuleBase[] = LIGHTING_MODULES;
 
 // === MULTIMÉDIA ===
 export const MULTIMEDIA: ModuleBase[] = [
@@ -657,6 +609,8 @@ export const FLOORING: ModuleBase[] = [
 // Export de tous les modules
 export const ALL_MODULES: ModuleBase[] = [
   ...STRUCTURES,
+  ...MULTI_LEVEL_MODULES, // Plateformes, escaliers, garde-corps
+  ...CURVED_MODULES, // Murs courbes, comptoirs arrondis, arches
   ...WALLS,
   ...FURNITURE,
   ...LIGHTING,

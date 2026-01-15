@@ -126,7 +126,7 @@ export const downloadCNCPlanSVG = (config: StandConfiguration) => {
 
   const blob = new Blob([svgContent], { type: 'image/svg+xml' });
   const link = document.createElement("a");
-  const url = URL.createObjectURL(bl  const url = URL.createObjectURL(blob);
+  const url = URL.createObjectURL(blob);
   link.setAttribute("href", url);
   link.setAttribute("download", `CNC_Plan_${config.name.replace(/\s+/g, '_')}.svg`);
   document.body.appendChild(link);

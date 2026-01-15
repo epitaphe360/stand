@@ -1,14 +1,28 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import pg from "pg";
-import * as schema from "@shared/schema";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import Database from "better-sqlite3";
+import * as schema from "@shared/schema-sqlite";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 
-const { Pool } = pg;
+// Utilise SQLite pour le développement local
+const dbPath = process.env.DATABASE_PATH || "./standplanet.db";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
-  );
+// Créer la base de données si elle n'existe pas
+if (!existsSync(dbPath)) {
+  console.log("Création de la base de données SQLite...");
+  writeFileSync(dbPath, "");
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle(pool, { schema });
+const sqlite = new Database(dbPath);
+
+// Activer les foreign keys dans SQLite
+sqlite.pragma("foreign_keys = ON");
+
+export const db = drizzle(sqlite, { schema });
+
+// Pour compatibilité avec l'ancien code PostgreSQL
+export const pool = {
+  query: async (...args: any[]) => {
+    console.warn("pool.query appelé mais non implémenté pour SQLite");
+    return { rows: [] };
+  }
+};

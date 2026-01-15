@@ -1,5 +1,7 @@
 import type { Express } from "express";
+import express from "express";
 import type { Server } from "http";
+import path from "path";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
@@ -110,6 +112,82 @@ export async function registerRoutes(
       res.status(400).json({ message: "Invalid input" });
     }
   });
+
+  // === Assets / Uploads ===
+  const { upload, handleAssetUpload, getUserAssets, deleteAsset } = await import("./uploads");
+
+  app.post("/api/assets/upload", upload.single("file"), handleAssetUpload);
+
+  app.get("/api/assets", getUserAssets);
+
+  app.delete("/api/assets/:id", deleteAsset);
+
+  // === Module Assets (Branding) ===
+  // Récupérer les assets appliqués à un module
+  app.get("/api/booths/:boothId/modules/:moduleInstanceId/assets", async (req, res) => {
+    try {
+      const { boothId, moduleInstanceId } = req.params;
+      const { db } = await import("./db");
+      const { moduleAssets, assets } = await import("@shared/schema-sqlite");
+      const { eq, and } = await import("drizzle-orm");
+
+      const result = await db
+        .select()
+        .from(moduleAssets)
+        .leftJoin(assets, eq(moduleAssets.assetId, assets.id))
+        .where(and(
+          eq(moduleAssets.boothId, parseInt(boothId)),
+          eq(moduleAssets.moduleInstanceId, moduleInstanceId)
+        ));
+
+      res.json({ assets: result });
+    } catch (e: any) {
+      res.status(500).json({ message: e.message });
+    }
+  });
+
+  // Appliquer un asset à un module
+  app.post("/api/booths/:boothId/modules/:moduleInstanceId/assets", async (req, res) => {
+    try {
+      const { boothId, moduleInstanceId } = req.params;
+      const { assetId, face, position, opacity, repeat } = req.body;
+      const { db } = await import("./db");
+      const { moduleAssets } = await import("@shared/schema-sqlite");
+
+      const result = await db.insert(moduleAssets).values({
+        boothId: parseInt(boothId),
+        moduleInstanceId,
+        assetId: parseInt(assetId),
+        face: face || 'front',
+        position: position ? JSON.stringify(position) : null,
+        opacity: opacity || 100,
+        repeat: repeat || 'no-repeat',
+      }).returning();
+
+      res.status(201).json({ moduleAsset: result[0] });
+    } catch (e: any) {
+      res.status(500).json({ message: e.message });
+    }
+  });
+
+  // Supprimer un asset d'un module
+  app.delete("/api/booths/:boothId/modules/:moduleInstanceId/assets/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { db } = await import("./db");
+      const { moduleAssets } = await import("@shared/schema-sqlite");
+      const { eq } = await import("drizzle-orm");
+
+      await db.delete(moduleAssets).where(eq(moduleAssets.id, parseInt(id)));
+
+      res.json({ success: true });
+    } catch (e: any) {
+      res.status(500).json({ message: e.message });
+    }
+  });
+
+  // Servir les fichiers uploadés statiquement
+  app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
   // Seed Data
   await seed();
