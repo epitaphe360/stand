@@ -5,6 +5,8 @@ import { useStudioStore } from '@/store/useStudioStore';
 import * as THREE from 'three';
 import { getMaterialProps } from '@/lib/3d/materials';
 import { RoundedBox } from '@react-three/drei'; // Import pour formes réalistes
+import GLTFLoader from './GLTFLoader';
+import { checkAABBCollision, getSnappedPosition, findNearestSnapPoint, canStack } from '@/lib/3d/collision';
 
 interface Module3DProps {
   module: PlacedModule;
@@ -16,7 +18,39 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
   const meshRef = useRef<any>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const { updateModule, snapToGrid, gridSize } = useStudioStore();
+  const { updateModule, snapToGrid, gridSize, placedModules } = useStudioStore();
+  const [hasCollision, setHasCollision] = useState(false);
+  const [useFallback, setUseFallback] = useState(false);
+
+  // Vérifier les collisions et gérer le stacking
+  const checkCollisionsAndStacking = (x: number, z: number, instanceId: string) => {
+    const currentModule = placedModules.find(m => m.instanceId === instanceId);
+    if (!currentModule) return { collision: false, y: currentModule?.position.y || 0 };
+
+    let collision = false;
+    let newY = 0; // Par défaut au sol
+
+    for (const other of placedModules) {
+      if (other.instanceId === instanceId) continue;
+
+      const isColliding = checkAABBCollision(
+        { x, y: 0, z },
+        currentModule.dimensions,
+        other.position,
+        other.dimensions
+      );
+
+      if (isColliding) {
+        if (canStack(currentModule, other)) {
+          // Si empilable, on ajuste la hauteur au lieu de marquer une collision
+          newY = other.position.y + other.dimensions.height;
+        } else {
+          collision = true;
+        }
+      }
+    }
+    return { collision, y: newY };
+  };
 
   // Animation de sélection (désactivée pour éviter confusion utilisateur)
   // useFrame(() => {
@@ -38,19 +72,31 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
     let newX = e.point.x;
     let newZ = e.point.z;
 
-    // Snap to grid
-    if (snapToGrid) {
-      newX = Math.round(newX / gridSize) * gridSize;
-      newZ = Math.round(newZ / gridSize) * gridSize;
+    // 1. Snapping aux points d'accroche (snap points)
+    const nearestSnap = findNearestSnapPoint({ x: newX, y: 0, z: newZ }, placedModules);
+    if (nearestSnap) {
+      newX = nearestSnap.x;
+      newZ = nearestSnap.z;
+    } else {
+      // 2. Sinon Snap to grid standard
+      const snapped = getSnappedPosition({ x: newX, y: 0, z: newZ }, gridSize, snapToGrid);
+      newX = snapped.x;
+      newZ = snapped.z;
     }
 
+    // 3. Vérifier les collisions et le stacking
+    const { collision, y } = checkCollisionsAndStacking(newX, newZ, module.instanceId);
+    setHasCollision(collision);
+
     updateModule(module.instanceId, {
-      position: { x: newX, y: module.position.y, z: newZ }
+      position: { x: newX, y: y, z: newZ }
     });
   };
 
   const handlePointerUp = () => {
     setIsDragging(false);
+    // Optionnel : On pourrait forcer un retour à la position précédente si collision
+    // Mais ici on préfère l'avertissement visuel
   };
 
   // Couleur basée sur le matériau
@@ -93,8 +139,9 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
   const renderDetailedModule = () => {
     const { width, height, depth } = module.dimensions;
     const color = getColor();
-    const emissive = isSelected ? '#4CAF50' : (hovered ? '#2196F3' : '#000000');
-    const emissiveIntensity = isSelected ? 0.5 : (hovered ? 0.3 : 0);
+    // Rouge si collision, vert si sélectionné, bleu si survolé
+    const emissive = hasCollision ? '#ff0000' : (isSelected ? '#4CAF50' : (hovered ? '#2196F3' : '#000000'));
+    const emissiveIntensity = hasCollision ? 0.8 : (isSelected ? 0.5 : (hovered ? 0.3 : 0));
 
     // MURS - Cloison Premium
     if (module.category === 'wall') {
@@ -408,6 +455,25 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
     }
 
     // Rendu par défaut selon le type de mesh
+    if (module.meshType === 'gltf' && module.gltfUrl && !useFallback) {
+      return (
+        <group
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+        >
+          <GLTFLoader 
+            url={module.gltfUrl} 
+            dimensions={module.dimensions} 
+            color={hasCollision ? '#ff0000' : (isSelected ? '#4CAF50' : undefined)}
+            onError={() => setUseFallback(true)}
+          />
+        </group>
+      );
+    }
+
     return renderBasicMesh();
   };
 
@@ -435,8 +501,8 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
             <meshStandardMaterial
               color={color}
               {...getMaterialProps()}
-              emissive={isSelected ? '#4CAF50' : (hovered ? '#2196F3' : '#000000')}
-              emissiveIntensity={isSelected ? 0.3 : (hovered ? 0.1 : 0)}
+	              emissive={emissive}
+	              emissiveIntensity={emissiveIntensity}
               roughness={0.5}
             />
           </RoundedBox>
@@ -459,8 +525,8 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
             <meshStandardMaterial
               color={color}
               {...getMaterialProps()}
-              emissive={isSelected ? '#4CAF50' : (hovered ? '#2196F3' : '#000000')}
-              emissiveIntensity={isSelected ? 0.5 : (hovered ? 0.3 : 0)}
+	              emissive={emissive}
+	              emissiveIntensity={emissiveIntensity}
             />
           </mesh>
         );
@@ -481,8 +547,8 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
             <meshStandardMaterial
               color={color}
               {...getMaterialProps()}
-              emissive={isSelected ? '#4CAF50' : (hovered ? '#2196F3' : '#000000')}
-              emissiveIntensity={isSelected ? 0.5 : (hovered ? 0.3 : 0)}
+	              emissive={emissive}
+	              emissiveIntensity={emissiveIntensity}
             />
           </mesh>
         );
@@ -579,16 +645,22 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
               </mesh>
             ))}
             {/* Tissu tendu */}
-            <mesh position={[0, 0, 0]} castShadow receiveShadow
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerEnter={() => setHovered(true)}
-              onPointerLeave={() => setHovered(false)}
-            >
-              <boxGeometry args={[width, height, depth]} />
-              <meshStandardMaterial color={color} roughness={0.8} metalness={0} />
-            </mesh>
+	            <mesh position={[0, 0, 0]} castShadow receiveShadow
+	              onPointerDown={handlePointerDown}
+	              onPointerMove={handlePointerMove}
+	              onPointerUp={handlePointerUp}
+	              onPointerEnter={() => setHovered(true)}
+	              onPointerLeave={() => setHovered(false)}
+	            >
+	              <boxGeometry args={[width, height, depth]} />
+	              <meshStandardMaterial
+	                color={color}
+	                roughness={0.8}
+	                metalness={0}
+	                emissive={emissive}
+	                emissiveIntensity={emissiveIntensity}
+	              />
+	            </mesh>
             {/* Lest inférieur */}
             <mesh position={[0, -height/2 - 0.05, 0]} rotation={[0, 0, Math.PI / 2]}>
               <cylinderGeometry args={[0.015, 0.015, width + 0.1, 16]} />
@@ -639,23 +711,28 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
       }
 
       // PLV générique (autres types)
-      if (module.category === 'plv') {
-        return (
-          <mesh
-            ref={meshRef}
-            castShadow
-            receiveShadow
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerEnter={() => setHovered(true)}
-            onPointerLeave={() => setHovered(false)}
-          >
-            <boxGeometry args={[width, height, depth]} />
-            <meshStandardMaterial color={color} {...getMaterialProps()} />
-          </mesh>
-        );
-      }
+	      if (module.category === 'plv') {
+	        return (
+	          <mesh
+	            ref={meshRef}
+	            castShadow
+	            receiveShadow
+	            onPointerDown={handlePointerDown}
+	            onPointerMove={handlePointerMove}
+	            onPointerUp={handlePointerUp}
+	            onPointerEnter={() => setHovered(true)}
+	            onPointerLeave={() => setHovered(false)}
+	          >
+	            <boxGeometry args={[width, height, depth]} />
+	            <meshStandardMaterial
+	              color={color}
+	              {...getMaterialProps()}
+	              emissive={emissive}
+	              emissiveIntensity={emissiveIntensity}
+	            />
+	          </mesh>
+	        );
+	      }
 
       // MULTIMEDIA - Écran LED 55"
       if (module.meshType === 'multi-001') {
@@ -680,11 +757,17 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
               <meshStandardMaterial color="#2a2a2a" metalness={0.8} roughness={0.15} />
             </mesh>
 
-            {/* Écran */}
-            <mesh castShadow position={[0, 0, 0]}>
-              <boxGeometry args={[1.2, 0.68, 0.04]} />
-              <meshStandardMaterial color="#0a0a0a" metalness={0.3} roughness={0.1} />
-            </mesh>
+	            {/* Écran */}
+	            <mesh castShadow position={[0, 0, 0]}>
+	              <boxGeometry args={[1.2, 0.68, 0.04]} />
+	              <meshStandardMaterial
+	                color="#0a0a0a"
+	                metalness={0.3}
+	                roughness={0.1}
+	                emissive={emissive}
+	                emissiveIntensity={emissiveIntensity}
+	              />
+	            </mesh>
 
             {/* Écran affichage (emissive) */}
             <mesh position={[0, 0, 0.025]}>
@@ -731,11 +814,17 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
               <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
             </mesh>
 
-            {/* Écran 85" */}
-            <mesh castShadow position={[0, 0, 0]}>
-              <boxGeometry args={[1.88, 1.06, 0.06]} />
-              <meshStandardMaterial color="#0a0a0a" metalness={0.4} roughness={0.15} />
-            </mesh>
+	            {/* Écran 85" */}
+	            <mesh castShadow position={[0, 0, 0]}>
+	              <boxGeometry args={[1.88, 1.06, 0.06]} />
+	              <meshStandardMaterial
+	                color="#0a0a0a"
+	                metalness={0.4}
+	                roughness={0.15}
+	                emissive={emissive}
+	                emissiveIntensity={emissiveIntensity}
+	              />
+	            </mesh>
 
             {/* Affichage (emissive) */}
             <mesh position={[0, 0, 0.035]}>
@@ -774,11 +863,17 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
               <meshStandardMaterial color="#2a2a2a" metalness={0.8} roughness={0.15} />
             </mesh>
 
-            {/* Écran circulaire */}
-            <mesh position={[0, height / 2 - 0.2, 0]}>
-              <cylinderGeometry args={[0.35, 0.35, 0.05, 32]} />
-              <meshStandardMaterial color="#0a0a0a" metalness={0.3} roughness={0.1} />
-            </mesh>
+	            {/* Écran circulaire */}
+	            <mesh position={[0, height / 2 - 0.2, 0]}>
+	              <cylinderGeometry args={[0.35, 0.35, 0.05, 32]} />
+	              <meshStandardMaterial
+	                color="#0a0a0a"
+	                metalness={0.3}
+	                roughness={0.1}
+	                emissive={emissive}
+	                emissiveIntensity={emissiveIntensity}
+	              />
+	            </mesh>
 
             {/* Surface tactile (emissive) */}
             <mesh position={[0, height / 2 - 0.15, 0.03]}>

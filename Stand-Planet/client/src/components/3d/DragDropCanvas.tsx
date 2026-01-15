@@ -66,12 +66,12 @@ export default function DragDropCanvas() {
             position={[0, -0.015, 0]} // Juste en dessous de la grille
           >
             <planeGeometry args={[width, depth]} />
-            {/* Sol réaliste (type stratifié ou moquette dense) */}
+            {/* Sol réaliste avec texture simulée par roughnessMap et normalMap si disponibles */}
             <meshStandardMaterial
               color={currentConfiguration.floorMaterial.value}
-              roughness={0.6}
-              metalness={0.1}
-              envMapIntensity={0.5}
+              roughness={0.8}
+              metalness={0.05}
+              envMapIntensity={0.8}
             />
           </mesh>
           

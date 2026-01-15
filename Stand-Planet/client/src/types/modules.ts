@@ -65,6 +65,14 @@ export interface ModuleBase {
   meshType: 'box' | 'cylinder' | 'sphere' | 'custom' | 'gltf' | 'multi-001' | 'multi-002' | 'multi-003' | 'multi-006' | 'multi-007' | 'multi-008' | 'furn-007' | 'furn-008' | 'furn-009' | 'furn-010' | 'deco-006' | 'deco-007' | 'plv-001' | 'plv-002' | 'plv-003' | 'plv-005';
   gltfUrl?: string; // si meshType === 'gltf'
   
+  // Propriétés physiques et comportementales
+  weight?: number; // en kg
+  stackable?: boolean; // peut-on poser des objets dessus ?
+  snapPoints?: {
+    position: ModulePosition;
+    type: 'wall' | 'floor' | 'top' | 'side';
+  }[];
+
   // Contraintes de module
   aspectRatio?: {
     width: number;

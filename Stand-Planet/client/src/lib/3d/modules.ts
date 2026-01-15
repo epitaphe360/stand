@@ -69,7 +69,14 @@ export const WALLS: ModuleBase[] = [
     defaultMaterial: { type: 'color', value: '#ffffff' },
     price: 150,
     tags: ['wall', 'plain', 'standard'],
-    meshType: 'box',
+    meshType: 'gltf',
+    gltfUrl: '/models/walls/wall_standard.glb',
+    weight: 25,
+    stackable: false,
+    snapPoints: [
+      { position: { x: 0, y: 1.25, z: 0.05 }, type: 'wall' },
+      { position: { x: 0, y: 1.25, z: -0.05 }, type: 'wall' }
+    ],
     customizable: { dimensions: true, material: false, color: true }
   },
   {
@@ -125,7 +132,10 @@ export const FURNITURE: ModuleBase[] = [
     defaultMaterial: { type: 'color', value: '#34495e', metalness: 0.2, roughness: 0.8 },
     price: 350,
     tags: ['counter', 'reception', 'essential'],
-    meshType: 'box',
+    meshType: 'gltf',
+    gltfUrl: '/models/furniture/counter.glb',
+    weight: 45,
+    stackable: true,
     customizable: { dimensions: true, material: true, color: true }
   },
   {
