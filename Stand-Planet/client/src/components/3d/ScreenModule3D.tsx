@@ -60,7 +60,7 @@ export default function ScreenModule3D({
       textureLoader.load(
         contentUrl,
         (loadedTexture) => {
-          loadedTexture.encoding = THREE.sRGBEncoding;
+          loadedTexture.colorSpace = THREE.SRGBColorSpace;
           setTexture(loadedTexture);
         },
         undefined,
