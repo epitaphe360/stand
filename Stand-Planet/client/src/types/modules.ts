@@ -161,6 +161,17 @@ export interface ModuleBase {
     closed?: boolean;
   };
 
+  // Configuration plafond suspendu
+  ceilingConfig?: {
+    type: 'suspended' | 'floating' | 'organic' | 'grid' | 'tensile';
+    suspensionHeight: number;
+    thickness: number;
+    hasCables?: boolean;
+    cableCount?: number;
+    lightingIntegrated?: boolean;
+    material?: 'fabric' | 'metal' | 'wood' | 'acrylic' | 'composite';
+  };
+
   // Propriétés personnalisables
   customizable: {
     dimensions: boolean;
