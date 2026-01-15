@@ -11,6 +11,7 @@ import DragDropCanvas from '@/components/3d/DragDropCanvas';
 import ModulePicker from './ModulePicker';
 import PropertiesPanel from './PropertiesPanel';
 import AIAssistant from '@/components/ai/AIAssistant';
+import EcoDashboard from './EcoDashboard';
 import { useStudioStore } from '@/store/useStudioStore';
 import { Badge } from '@/components/ui/badge';
 
@@ -278,6 +279,7 @@ export default function StandStudio() {
           )}
 
           <DragDropCanvas />
+          <EcoDashboard />
 
           {/* Floating Controls */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-gray-200 p-2 flex items-center gap-2">

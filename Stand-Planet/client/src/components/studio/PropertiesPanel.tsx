@@ -15,6 +15,7 @@ import {
 import { Trash2, Copy, Lock, Unlock, Box } from 'lucide-react';
 import { STRUCTURES, WALLS, FURNITURE, LIGHTING, MULTIMEDIA, DECORATION } from '@/lib/3d/modules';
 import { ModuleBase } from '@/types/modules';
+import MaterialSelector from './MaterialSelector';
 
 // Fonction pour trouver un module par ID
 const findModuleDefinition = (id: string): ModuleBase | undefined => {
@@ -242,6 +243,10 @@ export default function PropertiesPanel() {
             <Separator />
           </>
         )}
+
+        {/* Matériaux Certifiés */}
+        <MaterialSelector />
+        <Separator />
 
         {/* Variantes */}
         {moduleDefinition?.variants && moduleDefinition.variants.length > 0 && (

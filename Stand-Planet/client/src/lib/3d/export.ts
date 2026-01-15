@@ -34,13 +34,19 @@ export const generateBOM = (config: StandConfiguration) => {
       };
     }
 
-    // Calcul de la surface pour les matériaux au m2
-    const surface = module.dimensions.width * module.dimensions.height; // Approximation pour murs/panneaux
+    // Calcul précis de la surface ou du volume selon le type de module
+    let quantity = 0;
+    if (module.category === 'wall' || module.category === 'flooring') {
+      quantity = module.dimensions.width * (module.category === 'wall' ? module.dimensions.height : module.dimensions.depth);
+    } else {
+      // Pour le mobilier, on utilise une approximation de surface développée ou le poids fixe
+      quantity = (module.dimensions.width * module.dimensions.height * 2) + (module.dimensions.depth * module.dimensions.height * 2);
+    }
     
     summary[module.id].count += 1;
-    summary[module.id].total += module.price;
-    summary[module.id].weight += (module.weight || 0) + (certifiedMat ? certifiedMat.density * surface : 0);
-    summary[module.id].carbon += certifiedMat ? certifiedMat.carbonFootprint * surface : 0;
+    summary[module.id].total += module.price + (certifiedMat ? certifiedMat.pricePerUnit * quantity : 0);
+    summary[module.id].weight += (module.weight || 0) + (certifiedMat ? certifiedMat.density * quantity : 0);
+    summary[module.id].carbon += certifiedMat ? certifiedMat.carbonFootprint * quantity : 0;
   });
 
   return Object.values(summary);
