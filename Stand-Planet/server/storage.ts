@@ -1,4 +1,4 @@
-import { users, events, booths, orders, type User, type InsertUser, type Event, type InsertEvent, type Booth, type InsertBooth, type Order, type InsertOrder } from "@shared/schema";
+import { users, events, booths, orders, type User, type InsertUser, type Event, type InsertEvent, type Booth, type InsertBooth, type Order, type InsertOrder } from "@shared/schema-sqlite";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
