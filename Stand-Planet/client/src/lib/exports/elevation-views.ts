@@ -488,11 +488,11 @@ export async function exportElevationsToPDF(
   const views = generateAllElevationViews(configuration);
 
   // Dans une implémentation complète, on utiliserait jsPDF:
+  // TODO: Implement PDF export with jsPDF
   // const { jsPDF } = await import('jspdf');
   // const pdf = new jsPDF('landscape', 'mm', 'a4');
   // ... ajouter chaque vue SVG au PDF
   // pdf.save(filename);
 
-  console.log('Export PDF prévu - nécessite jsPDF');
-  return Promise.resolve();
+  throw new Error('PDF export not yet implemented - jsPDF library required');
 }
