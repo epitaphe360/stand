@@ -32,7 +32,7 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
   // Vérifier les collisions et gérer le stacking
   const checkCollisionsAndStacking = (x: number, z: number, instanceId: string) => {
     const currentModule = placedModules.find(m => m.instanceId === instanceId);
-    if (!currentModule) return { collision: false, y: currentModule?.position.y || 0 };
+    if (!currentModule) return { collision: false, y: 0 };
 
     let collision = false;
     let newY = 0; // Par défaut au sol

@@ -31,8 +31,10 @@ function createPlacedModule(
 export const CIMAT_STYLE_TEMPLATE: Omit<StandConfiguration, 'id' | 'userId' | 'createdAt' | 'updatedAt'> = {
   name: 'Stand Tech Multi-Niveaux',
   description: 'Stand moderne inspiré du style CIMAT avec plateforme surélevée, éclairage LED RGB et écrans multimédias',
-  dimensions: { width: 9, height: 3, depth: 6 },
+  dimensions: { width: 9, depth: 6 },
   tags: ['tech', 'multi-niveaux', 'premium', 'moderne'],
+  backgroundColor: '#1a1a2e',
+  floorMaterial: { type: 'color', value: '#2a2a3e' },
 
   modules: [
     // === STRUCTURE DE BASE ===
@@ -117,8 +119,10 @@ export const CIMAT_STYLE_TEMPLATE: Omit<StandConfiguration, 'id' | 'userId' | 'c
 export const MINIMALIST_LUXURY_TEMPLATE: Omit<StandConfiguration, 'id' | 'userId' | 'createdAt' | 'updatedAt'> = {
   name: 'Stand Minimaliste Luxe',
   description: 'Stand épuré avec matériaux premium, éclairage subtil et design minimaliste',
-  dimensions: { width: 6, height: 2.5, depth: 3 },
+  dimensions: { width: 6, depth: 3 },
   tags: ['luxe', 'minimaliste', 'premium', 'élégant'],
+  backgroundColor: '#f5f5f5',
+  floorMaterial: { type: 'color', value: '#ffffff' },
 
   modules: [
     // Base
@@ -169,8 +173,10 @@ export const MINIMALIST_LUXURY_TEMPLATE: Omit<StandConfiguration, 'id' | 'userId
 export const ECO_FRIENDLY_TEMPLATE: Omit<StandConfiguration, 'id' | 'userId' | 'createdAt' | 'updatedAt'> = {
   name: 'Stand Éco-Responsable',
   description: 'Stand 100% matériaux certifiés FSC/PEFC, design naturel, faible empreinte carbone',
-  dimensions: { width: 6, height: 2.5, depth: 3 },
+  dimensions: { width: 6, depth: 3 },
   tags: ['écologique', 'durable', 'naturel', 'certifié'],
+  backgroundColor: '#e8f5e9',
+  floorMaterial: { type: 'color', value: '#c8e6c9' },
 
   modules: [
     // Base
@@ -178,7 +184,7 @@ export const ECO_FRIENDLY_TEMPLATE: Omit<StandConfiguration, 'id' | 'userId' | '
 
     // Murs bois certifié
     createPlacedModule('wall-001', { x: 0, y: 0, z: -1.5 }, {
-      material: { type: 'certified', certifiedMaterialId: 'mat-001' } // Bois FSC
+      material: { type: 'certified', value: '#8B7355', certifiedMaterialId: 'mat-001' } // Bois FSC
     }),
 
     // Mur végétal
@@ -192,7 +198,7 @@ export const ECO_FRIENDLY_TEMPLATE: Omit<StandConfiguration, 'id' | 'userId' | '
 
     // Mobilier bois recyclé
     createPlacedModule('furn-001', { x: 0, y: 0, z: 1 }, {
-      material: { type: 'certified', certifiedMaterialId: 'mat-003' } // Bois PEFC
+      material: { type: 'certified', value: '#A0826D', certifiedMaterialId: 'mat-003' } // Bois PEFC
     }),
     createPlacedModule('furn-002', { x: -1, y: 0, z: -0.5 }),
 

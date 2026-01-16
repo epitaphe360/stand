@@ -39,8 +39,8 @@ export async function registerRoutes(
       res.json({
         id: user.id,
         email: user.email,
-        username: user.username,
-        fullName: user.fullName,
+        username: user.email,
+        fullName: user.name,
         role: user.role
       });
     } catch (e) {
@@ -64,8 +64,8 @@ export async function registerRoutes(
       res.status(201).json({
         id: user.id,
         email: user.email,
-        username: user.username,
-        fullName: user.fullName,
+        username: user.email,
+        fullName: user.name,
         role: user.role
       });
     } catch (e) {

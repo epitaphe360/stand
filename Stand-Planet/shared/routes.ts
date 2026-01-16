@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertUserSchema, insertEventSchema, insertBoothSchema, insertOrderSchema, users, events, booths, orders } from './schema';
+import { insertUserSchema, insertEventSchema, insertBoothSchema, insertOrderSchema, users, events, booths, orders } from './schema-sqlite';
 
 export const errorSchemas = {
   validation: z.object({

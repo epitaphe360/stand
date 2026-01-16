@@ -99,7 +99,7 @@ export function generateBillOfMaterials(
   }
 
   // Créer les items BOM
-  for (const [key, group] of moduleGroups.entries()) {
+  for (const [key, group] of Array.from(moduleGroups.entries())) {
     const module = group.modules[0];
 
     // Calculer dimensions en mm (standard fabrication)

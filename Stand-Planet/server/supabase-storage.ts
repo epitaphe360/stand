@@ -128,13 +128,16 @@ export async function handleAssetUpload(req: Request, res: Response) {
       .values({
         userId: parseInt(userId), // Convertir en number si nécessaire
         name: file.originalname,
+        fileName: file.originalname,
+        filePath: filePath,
+        fileSize: file.size,
+        mimeType: file.mimetype,
         type: file.mimetype.startsWith('image/')
           ? 'image'
           : file.mimetype.startsWith('video/')
           ? 'video'
           : 'document',
         url,
-        size: file.size,
         metadata: JSON.stringify({
           originalName: file.originalname,
           mimeType: file.mimetype,
