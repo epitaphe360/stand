@@ -62,7 +62,7 @@ export const GLTF_FURNITURE_OFFICE: ModuleBase[] = [
     price: 350,
     tags: ['bureau', 'mobilier', 'gltf', 'professionnel'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 45,
     stackable: false,
     gltfConfig: {
@@ -82,7 +82,7 @@ export const GLTF_FURNITURE_OFFICE: ModuleBase[] = [
     price: 220,
     tags: ['chaise', 'mobilier', 'gltf', 'ergonomique'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 18,
     stackable: true,
     gltfConfig: {
@@ -102,7 +102,7 @@ export const GLTF_FURNITURE_OFFICE: ModuleBase[] = [
     price: 280,
     tags: ['étagère', 'bibliothèque', 'gltf', 'stockage'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 35,
     stackable: false,
     gltfConfig: {
@@ -122,7 +122,7 @@ export const GLTF_FURNITURE_OFFICE: ModuleBase[] = [
     price: 550,
     tags: ['table', 'réunion', 'gltf', 'professionnel'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 65,
     stackable: false,
     gltfConfig: {
@@ -142,7 +142,7 @@ export const GLTF_FURNITURE_OFFICE: ModuleBase[] = [
     price: 150,
     tags: ['caisson', 'rangement', 'gltf', 'mobile'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 20,
     stackable: false,
     gltfConfig: {
@@ -168,7 +168,7 @@ export const GLTF_ELECTRONICS: ModuleBase[] = [
     price: 50,
     tags: ['ordinateur', 'laptop', 'gltf', 'tech'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 2,
     stackable: true,
     gltfConfig: {
@@ -190,7 +190,7 @@ export const GLTF_ELECTRONICS: ModuleBase[] = [
     price: 30,
     tags: ['smartphone', 'téléphone', 'gltf', 'tech'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.5,
     stackable: true,
     gltfConfig: {
@@ -210,7 +210,7 @@ export const GLTF_ELECTRONICS: ModuleBase[] = [
     price: 40,
     tags: ['tablette', 'tablet', 'gltf', 'tech'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 1,
     stackable: true,
     gltfConfig: {
@@ -230,7 +230,7 @@ export const GLTF_ELECTRONICS: ModuleBase[] = [
     price: 35,
     tags: ['casque', 'audio', 'gltf', 'tech'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 1.5,
     stackable: true,
     gltfConfig: {
@@ -250,7 +250,7 @@ export const GLTF_ELECTRONICS: ModuleBase[] = [
     price: 45,
     tags: ['enceinte', 'speaker', 'gltf', 'audio'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 2,
     stackable: true,
     gltfConfig: {
@@ -276,7 +276,7 @@ export const GLTF_PLANTS: ModuleBase[] = [
     price: 80,
     tags: ['plante', 'décoration', 'gltf', 'naturel'],
     meshType: 'gltf',
-    customizable: { material: false, color: false },
+    customizable: { dimensions: false, material: false, color: false },
     weight: 12,
     stackable: false,
     gltfConfig: {
@@ -296,7 +296,7 @@ export const GLTF_PLANTS: ModuleBase[] = [
     price: 25,
     tags: ['cactus', 'plante', 'gltf', 'déco'],
     meshType: 'gltf',
-    customizable: { material: false, color: false },
+    customizable: { dimensions: false, material: false, color: false },
     weight: 2,
     stackable: true,
     gltfConfig: {
@@ -316,7 +316,7 @@ export const GLTF_PLANTS: ModuleBase[] = [
     price: 150,
     tags: ['ficus', 'plante', 'gltf', 'grand'],
     meshType: 'gltf',
-    customizable: { material: false, color: false },
+    customizable: { dimensions: false, material: false, color: false },
     weight: 25,
     stackable: false,
     gltfConfig: {
@@ -336,7 +336,7 @@ export const GLTF_PLANTS: ModuleBase[] = [
     price: 35,
     tags: ['succulente', 'plante', 'gltf', 'trio'],
     meshType: 'gltf',
-    customizable: { material: false, color: false },
+    customizable: { dimensions: false, material: false, color: false },
     weight: 3,
     stackable: true,
     gltfConfig: {
@@ -356,7 +356,7 @@ export const GLTF_PLANTS: ModuleBase[] = [
     price: 90,
     tags: ['bambou', 'plante', 'gltf', 'zen'],
     meshType: 'gltf',
-    customizable: { material: false, color: false },
+    customizable: { dimensions: false, material: false, color: false },
     weight: 15,
     stackable: false,
     gltfConfig: {
@@ -382,7 +382,7 @@ export const GLTF_DECORATIONS: ModuleBase[] = [
     price: 60,
     tags: ['vase', 'décoration', 'gltf', 'design'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 3,
     stackable: true,
     gltfConfig: {
@@ -402,7 +402,7 @@ export const GLTF_DECORATIONS: ModuleBase[] = [
     price: 70,
     tags: ['horloge', 'décoration', 'gltf', 'murale'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 2,
     stackable: false,
     gltfConfig: {
@@ -424,7 +424,7 @@ export const GLTF_DECORATIONS: ModuleBase[] = [
     price: 120,
     tags: ['sculpture', 'art', 'gltf', 'moderne'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 8,
     stackable: false,
     gltfConfig: {
@@ -444,7 +444,7 @@ export const GLTF_DECORATIONS: ModuleBase[] = [
     price: 40,
     tags: ['cadre', 'photo', 'gltf', 'déco'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 1,
     stackable: true,
     gltfConfig: {
@@ -464,7 +464,7 @@ export const GLTF_DECORATIONS: ModuleBase[] = [
     price: 25,
     tags: ['bougie', 'décoration', 'gltf', 'led'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.5,
     stackable: true,
     gltfConfig: {
@@ -494,7 +494,7 @@ export const GLTF_LIGHTING: ModuleBase[] = [
     price: 90,
     tags: ['lampe', 'éclairage', 'gltf', 'bureau'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 3,
     stackable: false,
     gltfConfig: {
@@ -516,7 +516,7 @@ export const GLTF_LIGHTING: ModuleBase[] = [
     price: 150,
     tags: ['suspension', 'éclairage', 'gltf', 'design'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 4,
     stackable: false,
     gltfConfig: {
@@ -540,7 +540,7 @@ export const GLTF_LIGHTING: ModuleBase[] = [
     price: 180,
     tags: ['lampadaire', 'éclairage', 'gltf', 'trépied'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 8,
     stackable: false,
     gltfConfig: {
@@ -560,7 +560,7 @@ export const GLTF_LIGHTING: ModuleBase[] = [
     price: 70,
     tags: ['spot', 'led', 'gltf', 'orientable'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 2,
     stackable: true,
     gltfConfig: {
@@ -584,7 +584,7 @@ export const GLTF_LIGHTING: ModuleBase[] = [
     price: 85,
     tags: ['applique', 'murale', 'gltf', 'led'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 1.5,
     stackable: true,
     gltfConfig: {
@@ -614,7 +614,7 @@ export const GLTF_DISPLAY: ModuleBase[] = [
     price: 120,
     tags: ['présentoir', 'brochure', 'gltf', 'plv'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 8,
     stackable: false,
     gltfConfig: {
@@ -634,7 +634,7 @@ export const GLTF_DISPLAY: ModuleBase[] = [
     price: 350,
     tags: ['vitrine', 'exposition', 'gltf', 'verre'],
     meshType: 'gltf',
-    customizable: { material: true, color: false },
+    customizable: { dimensions: false, material: true, color: false },
     weight: 45,
     stackable: false,
     gltfConfig: {
@@ -654,7 +654,7 @@ export const GLTF_DISPLAY: ModuleBase[] = [
     price: 180,
     tags: ['mannequin', 'buste', 'gltf', 'textile'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 12,
     stackable: false,
     gltfConfig: {
@@ -674,7 +674,7 @@ export const GLTF_DISPLAY: ModuleBase[] = [
     price: 200,
     tags: ['podium', 'tournant', 'gltf', 'rotation'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 15,
     stackable: true,
     gltfConfig: {
@@ -696,7 +696,7 @@ export const GLTF_DISPLAY: ModuleBase[] = [
     price: 95,
     tags: ['chevalet', 'présentation', 'gltf', 'affiche'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 6,
     stackable: false,
     gltfConfig: {
@@ -722,7 +722,7 @@ export const GLTF_EVERYDAY: ModuleBase[] = [
     price: 15,
     tags: ['tasse', 'café', 'gltf', 'accessoire'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.3,
     stackable: true,
     gltfConfig: {
@@ -742,7 +742,7 @@ export const GLTF_EVERYDAY: ModuleBase[] = [
     price: 20,
     tags: ['livre', 'book', 'gltf', 'déco'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.8,
     stackable: true,
     gltfConfig: {
@@ -762,7 +762,7 @@ export const GLTF_EVERYDAY: ModuleBase[] = [
     price: 18,
     tags: ['stylo', 'crayon', 'gltf', 'bureau'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.5,
     stackable: true,
     gltfConfig: {
@@ -782,7 +782,7 @@ export const GLTF_EVERYDAY: ModuleBase[] = [
     price: 25,
     tags: ['calendrier', 'bureau', 'gltf', 'accessoire'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.6,
     stackable: true,
     gltfConfig: {
@@ -802,7 +802,7 @@ export const GLTF_EVERYDAY: ModuleBase[] = [
     price: 22,
     tags: ['bouteille', 'eau', 'gltf', 'eco'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.4,
     stackable: true,
     gltfConfig: {
@@ -828,7 +828,7 @@ export const GLTF_ART: ModuleBase[] = [
     price: 200,
     tags: ['buste', 'sculpture', 'gltf', 'art'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 15,
     stackable: false,
     gltfConfig: {
@@ -848,7 +848,7 @@ export const GLTF_ART: ModuleBase[] = [
     price: 180,
     tags: ['sculpture', 'géométrique', 'gltf', 'moderne'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 12,
     stackable: false,
     gltfConfig: {
@@ -868,7 +868,7 @@ export const GLTF_ART: ModuleBase[] = [
     price: 250,
     tags: ['tableau', 'art', 'gltf', 'cadre'],
     meshType: 'gltf',
-    customizable: { material: true, color: false },
+    customizable: { dimensions: false, material: true, color: false },
     weight: 8,
     stackable: false,
     gltfConfig: {
@@ -888,7 +888,7 @@ export const GLTF_ART: ModuleBase[] = [
     price: 300,
     tags: ['statue', 'minimaliste', 'gltf', 'design'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 20,
     stackable: false,
     gltfConfig: {
@@ -908,7 +908,7 @@ export const GLTF_ART: ModuleBase[] = [
     price: 400,
     tags: ['installation', 'art', 'gltf', 'lumière'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 10,
     stackable: false,
     gltfConfig: {
@@ -940,7 +940,7 @@ export const GLTF_PRODUCTS: ModuleBase[] = [
     price: 50,
     tags: ['montre', 'luxe', 'gltf', 'produit'],
     meshType: 'gltf',
-    customizable: { material: true, color: false },
+    customizable: { dimensions: false, material: true, color: false },
     weight: 0.2,
     stackable: true,
     gltfConfig: {
@@ -960,7 +960,7 @@ export const GLTF_PRODUCTS: ModuleBase[] = [
     price: 35,
     tags: ['parfum', 'cosmétique', 'gltf', 'luxe'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.3,
     stackable: true,
     gltfConfig: {
@@ -980,7 +980,7 @@ export const GLTF_PRODUCTS: ModuleBase[] = [
     price: 30,
     tags: ['lunettes', 'accessoire', 'gltf', 'mode'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.2,
     stackable: true,
     gltfConfig: {
@@ -1000,7 +1000,7 @@ export const GLTF_PRODUCTS: ModuleBase[] = [
     price: 45,
     tags: ['sac', 'mode', 'gltf', 'accessoire'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 1.5,
     stackable: true,
     gltfConfig: {
@@ -1020,7 +1020,7 @@ export const GLTF_PRODUCTS: ModuleBase[] = [
     price: 28,
     tags: ['chaussure', 'sport', 'gltf', 'sneaker'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 0.8,
     stackable: true,
     gltfConfig: {
@@ -1046,7 +1046,7 @@ export const GLTF_FOOD: ModuleBase[] = [
     price: 25,
     tags: ['vin', 'bouteille', 'gltf', 'boisson'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 1.2,
     stackable: true,
     gltfConfig: {
@@ -1066,7 +1066,7 @@ export const GLTF_FOOD: ModuleBase[] = [
     price: 18,
     tags: ['champagne', 'verre', 'gltf', 'élégant'],
     meshType: 'gltf',
-    customizable: { material: false, color: false },
+    customizable: { dimensions: false, material: false, color: false },
     weight: 0.3,
     stackable: true,
     gltfConfig: {
@@ -1086,7 +1086,7 @@ export const GLTF_FOOD: ModuleBase[] = [
     price: 40,
     tags: ['fruits', 'panier', 'gltf', 'déco'],
     meshType: 'gltf',
-    customizable: { material: false, color: false },
+    customizable: { dimensions: false, material: false, color: false },
     weight: 2,
     stackable: true,
     gltfConfig: {
@@ -1106,7 +1106,7 @@ export const GLTF_FOOD: ModuleBase[] = [
     price: 150,
     tags: ['café', 'machine', 'gltf', 'pro'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 12,
     stackable: false,
     gltfConfig: {
@@ -1126,7 +1126,7 @@ export const GLTF_FOOD: ModuleBase[] = [
     price: 35,
     tags: ['plateau', 'apéritif', 'gltf', 'déco'],
     meshType: 'gltf',
-    customizable: { material: true, color: true },
+    customizable: { dimensions: false, material: true, color: true },
     weight: 2,
     stackable: true,
     gltfConfig: {

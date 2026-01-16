@@ -503,6 +503,9 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
   const renderBasicMesh = () => {
     const { width, height, depth } = module.dimensions;
     const color = getColor();
+    // Rouge si collision, vert si sélectionné, bleu si survolé
+    const emissive = hasCollision ? '#ff0000' : (isSelected ? '#4CAF50' : (hovered ? '#2196F3' : '#000000'));
+    const emissiveIntensity = hasCollision ? 0.8 : (isSelected ? 0.5 : (hovered ? 0.3 : 0));
 
     switch (module.meshType) {
       case 'box':

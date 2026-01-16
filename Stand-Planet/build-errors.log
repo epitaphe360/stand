@@ -1,0 +1,27 @@
+
+> rest-express@1.0.0 build
+> tsx script/build.ts
+
+building client...
+vite v7.3.0 building client environment for production...
+transforming...
+✓ 2835 modules transformed.
+[plugin vite:reporter] 
+(!) /home/user/stand/Stand-Planet/client/src/lib/3d/modules.ts is dynamically imported by /home/user/stand/Stand-Planet/client/src/components/ai/AIAssistant.tsx but also statically imported by /home/user/stand/Stand-Planet/client/src/components/studio/ModulePicker.tsx, /home/user/stand/Stand-Planet/client/src/components/studio/PropertiesPanel.tsx, /home/user/stand/Stand-Planet/client/src/components/studio/TemplateSelector.tsx, /home/user/stand/Stand-Planet/client/src/lib/ai/designGenerator.ts, dynamic import will not move module into another chunk.
+
+rendering chunks...
+computing gzip size...
+../dist/public/index.html                     2.01 kB │ gzip:   0.76 kB
+../dist/public/assets/index-6YP5DEot.css     96.69 kB │ gzip:  15.13 kB
+../dist/public/assets/index-QTwkbG86.js   2,175.95 kB │ gzip: 608.69 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 22.51s
+building server...
+
+  dist/index.cjs  1.1mb ⚠️
+
+⚡ Done in 337ms

@@ -21,14 +21,19 @@ const registerSchema = z.object({
 type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function Register() {
+  const { register, isRegistering } = useAuth();
   const form = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     defaultValues: { role: "exhibitor" },
   });
 
   const onSubmit = (data: RegisterForm) => {
-    console.log("Register:", data);
-    // Integrate with useAuth().register when ready
+    register({
+      email: data.email,
+      password: data.password,
+      fullName: data.name,
+      role: data.role,
+    });
   };
 
   return (
@@ -141,8 +146,8 @@ export default function Register() {
                     )}
                   />
                   
-                  <Button type="submit" className="w-full" disabled>
-                    Create Account (Demo)
+                  <Button type="submit" className="w-full" disabled={isRegistering}>
+                    {isRegistering ? "Creating Account..." : "Create Account"}
                   </Button>
                 </form>
               </Form>
