@@ -172,6 +172,24 @@ export interface ModuleBase {
     material?: 'fabric' | 'metal' | 'wood' | 'acrylic' | 'composite';
   };
 
+  // Configuration GLTF (pour modèles 3D importés)
+  gltfConfig?: {
+    url: string;
+    defaultScale?: number | [number, number, number];
+    useDraco?: boolean;
+    materialOverrides?: {
+      color?: string;
+      metalness?: number;
+      roughness?: number;
+      emissive?: string;
+      emissiveIntensity?: number;
+    };
+    hasAnimations?: boolean;
+    animationNames?: string[];
+    license?: string;
+    attribution?: string;
+  };
+
   // Propriétés personnalisables
   customizable: {
     dimensions: boolean;

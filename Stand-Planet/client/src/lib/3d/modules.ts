@@ -358,6 +358,7 @@ import { LIGHTING_MODULES } from './lighting-modules';
 import { MULTI_LEVEL_MODULES } from './multi-level';
 import { CURVED_MODULES } from './curved-modules';
 import { CEILING_MODULES } from './ceiling-modules';
+import { ALL_GLTF_MODELS } from './gltf-models';
 
 export const LIGHTING: ModuleBase[] = LIGHTING_MODULES;
 
@@ -613,6 +614,7 @@ export const ALL_MODULES: ModuleBase[] = [
   ...MULTI_LEVEL_MODULES, // Plateformes, escaliers, garde-corps
   ...CURVED_MODULES, // Murs courbes, comptoirs arrondis, arches
   ...CEILING_MODULES, // Plafonds suspendus et structures aériennes
+  ...ALL_GLTF_MODELS, // Modèles 3D GLTF professionnels (50 modèles)
   ...WALLS,
   ...FURNITURE,
   ...LIGHTING,
