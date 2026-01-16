@@ -5,17 +5,22 @@ import path from "path";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
-import { insertUserSchema } from "@shared/schema";
+import { insertUserSchema } from "@shared/schema-sqlite";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
 
+  // === Health Check (for Railway) ===
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+
   // === Auth (Mock/Simple) ===
-  // In a real scenario, use Replit Auth or Supabase Auth. 
+  // In a real scenario, use Replit Auth or Supabase Auth.
   // Here we provide endpoints that match the client's expectation for a custom auth flow or mock.
-  
+
   app.post(api.auth.login.path, async (req, res) => {
     try {
       const { username, password } = api.auth.login.input.parse(req.body);
