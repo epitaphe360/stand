@@ -19,37 +19,75 @@ export async function registerRoutes(
   });
 
   // === Auth ===
-  // MIGRATION SUPABASE: L'authentification est maintenant gérée côté client avec Supabase Auth
-  // Les routes auth ci-dessous ne sont plus utilisées. L'auth se fait directement via Supabase.
-  // Les routes API utilisent le middleware requireAuth pour vérifier le JWT Supabase.
+  // SYSTÈME HYBRIDE: Supporte Supabase Auth ET auth basique (fallback)
+  // - Avec Supabase: Client utilise supabase.auth.* directement
+  // - Sans Supabase: Client utilise ces routes + session basique
 
-  // Ces endpoints sont conservés pour compatibilité mais ne sont plus utilisés
   app.post(api.auth.login.path, async (req, res) => {
-    res.status(410).json({
-      message: "This endpoint is deprecated. Please use Supabase Auth directly from the client.",
-      migration: "Use supabase.auth.signInWithPassword() instead"
-    });
+    try {
+      const { username, password } = api.auth.login.input.parse(req.body);
+
+      // Check dans la base locale (SQLite)
+      const user = await storage.getUserByUsername(username);
+
+      if (!user || user.password !== password) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // En production avec Supabase, ce endpoint ne sera pas utilisé
+      // Le client utilisera supabase.auth.signInWithPassword() directement
+      res.json({
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        fullName: user.fullName,
+        role: user.role
+      });
+    } catch (e) {
+      res.status(400).json({ message: "Invalid input" });
+    }
   });
 
   app.post(api.auth.register.path, async (req, res) => {
-    res.status(410).json({
-      message: "This endpoint is deprecated. Please use Supabase Auth directly from the client.",
-      migration: "Use supabase.auth.signUp() instead"
-    });
+    try {
+      const input = api.auth.register.input.parse(req.body);
+
+      // Check si email existe déjà
+      const existing = await storage.getUserByEmail(input.email);
+      if (existing) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+
+      // Créer l'utilisateur dans SQLite
+      const user = await storage.createUser(input);
+
+      res.status(201).json({
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        fullName: user.fullName,
+        role: user.role
+      });
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        return res.status(400).json({ message: e.errors[0].message });
+      }
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   });
 
   app.get(api.auth.me.path, async (req, res) => {
-    res.status(410).json({
-      message: "This endpoint is deprecated. Please use Supabase Auth directly from the client.",
-      migration: "Use supabase.auth.getUser() instead"
+    // Sans système de session, on ne peut pas implémenter /me
+    // Le client doit stocker l'utilisateur en localStorage
+    // OU utiliser Supabase qui gère les sessions
+    res.status(501).json({
+      message: "Not implemented. Use Supabase Auth or client-side session management."
     });
   });
 
   app.post(api.auth.logout.path, (req, res) => {
-    res.status(410).json({
-      message: "This endpoint is deprecated. Please use Supabase Auth directly from the client.",
-      migration: "Use supabase.auth.signOut() instead"
-    });
+    // Pas de session côté serveur = pas besoin de logout serveur
+    res.json({ message: "Logged out successfully" });
   });
 
   // === Events ===
