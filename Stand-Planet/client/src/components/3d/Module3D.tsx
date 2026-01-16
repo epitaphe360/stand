@@ -11,6 +11,7 @@ import ScreenModule3D from './ScreenModule3D';
 import MultiLevelModule3D from './MultiLevelModule3D';
 import CurvedModule3D from './CurvedModule3D';
 import CeilingModule3D from './CeilingModule3D';
+import GLTFModule3D from './GLTFModule3D';
 import { checkAABBCollision, getSnappedPosition, findNearestSnapPoint, canStack } from '@/lib/3d/collision';
 import { loadAssetTexture } from '@/lib/3d/texture-loader';
 
@@ -1444,6 +1445,11 @@ export default function Module3D({ module, isSelected, onSelect }: Module3DProps
   // Si c'est un plafond suspendu
   if (module.id.startsWith('ceiling-') || (module as any).ceilingConfig) {
     return <CeilingModule3D module={module} isSelected={isSelected} />;
+  }
+
+  // Si c'est un modèle GLTF
+  if (module.id.startsWith('gltf-') || (module as any).gltfConfig) {
+    return <GLTFModule3D module={module} isSelected={isSelected} />;
   }
 
   return (
