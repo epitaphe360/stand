@@ -128,3 +128,12 @@ export function buildUrl(path: string, params?: Record<string, string | number>)
   }
   return url;
 }
+
+// Re-export types for convenience (fixes import errors in hooks)
+export type {
+  LoginRequest,
+  InsertEvent,
+  InsertBooth,
+  InsertOrder,
+  InsertUser
+} from './schema';
