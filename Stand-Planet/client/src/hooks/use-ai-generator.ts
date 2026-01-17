@@ -27,22 +27,19 @@ export function useAIGenerator(options?: UseAIGeneratorOptions) {
       const apiKey = localStorage.getItem('openai_api_key') || '';
       
       if (!apiKey) {
-        // Mode démo sans API
-        const mockConfig: StandConfiguration = {
-          name: 'Stand Généré (Demo)',
-          description: `Configuration basée sur: ${prompt}`,
-          dimensions: additionalParams?.dimensions || { width: 6, depth: 3 },
-          modules: [],
-          backgroundColor: '#f5f5f5',
-          floorMaterial: { type: 'color', value: '#e8e8e8' },
-          style: (additionalParams?.style as any) || 'modern',
-          industry: additionalParams?.industry,
-          totalPrice: 0
-        };
-        
-        setConfigurations([mockConfig]);
-        options?.onSuccess?.([mockConfig]);
-        return [mockConfig];
+        // Mode démo sans API - utiliser la génération par défaut
+        // qui crée une vraie configuration avec des modules
+        const defaultConfig = await generateDesignFromPrompt(
+          {
+            prompt,
+            ...additionalParams
+          },
+          '' // Pas d'API key - utilisera getDefaultDesign()
+        );
+
+        setConfigurations(defaultConfig);
+        options?.onSuccess?.(defaultConfig);
+        return defaultConfig;
       }
 
       const result = await generateDesignFromPrompt(

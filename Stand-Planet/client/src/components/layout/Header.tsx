@@ -39,7 +39,7 @@ export function Header() {
               <div className="h-4 w-px bg-border mx-2" />
               
               <span className="text-sm text-foreground font-medium hidden md:block">
-                {user.name}
+                {user.fullName || user.username || user.email}
               </span>
               
               <Button variant="ghost" size="sm" onClick={() => logout()}>

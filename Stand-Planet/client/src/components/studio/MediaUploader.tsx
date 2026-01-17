@@ -437,8 +437,6 @@ export function useMediaDragDrop() {
           type: media.type === 'image' ? 'texture' : 'video',
         },
       } as any);
-
-      console.log(`Média "${media.name}" assigné à "${module.name}"`);
     },
     [placedModules, updateModule]
   );

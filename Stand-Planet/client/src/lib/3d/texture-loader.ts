@@ -21,7 +21,7 @@ export interface TextureLoadOptions {
   wrapS?: THREE.Wrapping;
   wrapT?: THREE.Wrapping;
   anisotropy?: number;
-  encoding?: THREE.TextureEncoding;
+  colorSpace?: string; // 'srgb' | 'srgb-linear' | '' (Three.js r152+)
 }
 
 /**
@@ -67,8 +67,8 @@ export async function loadTexture(
           texture.anisotropy = options.anisotropy;
         }
 
-        if (options.encoding !== undefined) {
-          texture.encoding = options.encoding;
+        if (options.colorSpace !== undefined) {
+          texture.colorSpace = options.colorSpace;
         }
 
         // Mettre en cache
@@ -135,7 +135,7 @@ export function applyPBRTextures(
 ): void {
   if (textures.albedo) {
     material.map = textures.albedo;
-    material.map.encoding = THREE.sRGBEncoding;
+    material.map.colorSpace = THREE.SRGBColorSpace;
   }
 
   if (textures.normal) {
@@ -175,9 +175,9 @@ export async function loadAssetTexture(
   assetUrl: string,
   options: TextureLoadOptions = {}
 ): Promise<THREE.Texture> {
-  // Par défaut, on utilise sRGB encoding pour les images
+  // Par défaut, on utilise sRGB colorSpace pour les images
   const defaultOptions: TextureLoadOptions = {
-    encoding: THREE.sRGBEncoding,
+    colorSpace: THREE.SRGBColorSpace,
     anisotropy: 16, // Meilleure qualité
     ...options,
   };

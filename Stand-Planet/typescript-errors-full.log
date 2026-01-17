@@ -1,0 +1,140 @@
+client/src/components/3d/DragDropCanvas.tsx(34,8): error TS2741: Property 'store' is missing in type '{}' but required in type 'Omit<Omit<{ store: XRStore; mode: XRSessionMode; onError?: ((error: any) => void) | undefined; children?: ReactNode | ((status: "unsupported" | "exited" | "entered") => ReactNode); } & Omit<...> & RefAttributes<...>, "ref">, "mode">'.
+client/src/components/3d/DragDropCanvas.tsx(40,10): error TS2741: Property 'store' is missing in type '{ children: Element; }' but required in type 'XRProperties'.
+client/src/components/3d/DragDropCanvas.tsx(131,29): error TS2322: Type '{ children: Element[]; disableNormalPass: true; }' is not assignable to type 'IntrinsicAttributes & EffectComposerProps & RefAttributes<EffectComposer>'.
+  Property 'disableNormalPass' does not exist on type 'IntrinsicAttributes & EffectComposerProps & RefAttributes<EffectComposer>'. Did you mean 'enableNormalPass'?
+client/src/components/3d/DragDropCanvas.tsx(136,17): error TS2322: Type 'string' is not assignable to type 'Color'.
+client/src/components/3d/LightModule3D.tsx(163,52): error TS2339: Property 'emissiveIntensity' does not exist on type 'ModuleMaterial'.
+client/src/components/3d/LightModule3D.tsx(164,46): error TS2339: Property 'transparent' does not exist on type 'ModuleMaterial'.
+client/src/components/3d/LightModule3D.tsx(214,52): error TS2339: Property 'emissiveIntensity' does not exist on type 'ModuleMaterial'.
+client/src/components/3d/LightModule3D.tsx(215,46): error TS2339: Property 'transparent' does not exist on type 'ModuleMaterial'.
+client/src/components/3d/Module3D.tsx(35,70): error TS2339: Property 'position' does not exist on type 'never'.
+client/src/components/3d/Module3D.tsx(526,26): error TS2304: Cannot find name 'emissive'.
+client/src/components/3d/Module3D.tsx(527,35): error TS2304: Cannot find name 'emissiveIntensity'.
+client/src/components/3d/Module3D.tsx(550,26): error TS2304: Cannot find name 'emissive'.
+client/src/components/3d/Module3D.tsx(551,35): error TS2304: Cannot find name 'emissiveIntensity'.
+client/src/components/3d/Module3D.tsx(572,26): error TS2304: Cannot find name 'emissive'.
+client/src/components/3d/Module3D.tsx(573,35): error TS2304: Cannot find name 'emissiveIntensity'.
+client/src/components/3d/Module3D.tsx(682,28): error TS2304: Cannot find name 'emissive'.
+client/src/components/3d/Module3D.tsx(683,37): error TS2304: Cannot find name 'emissiveIntensity'.
+client/src/components/3d/Module3D.tsx(752,26): error TS2304: Cannot find name 'emissive'.
+client/src/components/3d/Module3D.tsx(753,35): error TS2304: Cannot find name 'emissiveIntensity'.
+client/src/components/3d/Module3D.tsx(789,28): error TS2304: Cannot find name 'emissive'.
+client/src/components/3d/Module3D.tsx(790,37): error TS2304: Cannot find name 'emissiveIntensity'.
+client/src/components/3d/Module3D.tsx(846,28): error TS2304: Cannot find name 'emissive'.
+client/src/components/3d/Module3D.tsx(847,37): error TS2304: Cannot find name 'emissiveIntensity'.
+client/src/components/3d/Module3D.tsx(895,28): error TS2304: Cannot find name 'emissive'.
+client/src/components/3d/Module3D.tsx(896,37): error TS2304: Cannot find name 'emissiveIntensity'.
+client/src/components/3d/PostProcessing.tsx(83,7): error TS2322: Type 'false | Element' is not assignable to type 'Element'.
+  Type 'boolean' is not assignable to type 'ReactElement<any, any>'.
+client/src/components/3d/PostProcessing.tsx(84,7): error TS2322: Type 'false | Element' is not assignable to type 'Element'.
+  Type 'boolean' is not assignable to type 'ReactElement<any, any>'.
+client/src/components/3d/PostProcessing.tsx(93,7): error TS2322: Type 'false | Element' is not assignable to type 'Element'.
+  Type 'boolean' is not assignable to type 'ReactElement<any, any>'.
+client/src/components/3d/PostProcessing.tsx(94,7): error TS2322: Type 'false | Element' is not assignable to type 'Element'.
+  Type 'boolean' is not assignable to type 'ReactElement<any, any>'.
+client/src/components/3d/PostProcessing.tsx(103,7): error TS2322: Type 'false | Element' is not assignable to type 'Element'.
+  Type 'boolean' is not assignable to type 'ReactElement<any, any>'.
+client/src/components/3d/PostProcessing.tsx(104,7): error TS2322: Type 'false | Element' is not assignable to type 'Element'.
+  Type 'boolean' is not assignable to type 'ReactElement<any, any>'.
+client/src/components/3d/PostProcessing.tsx(112,7): error TS2322: Type 'undefined' is not assignable to type 'Element'.
+client/src/components/3d/PostProcessing.tsx(113,7): error TS2322: Type 'false | Element' is not assignable to type 'Element'.
+  Type 'boolean' is not assignable to type 'ReactElement<any, any>'.
+client/src/components/3d/PostProcessing.tsx(120,7): error TS2322: Type 'undefined' is not assignable to type 'Element'.
+client/src/components/3d/PostProcessing.tsx(121,7): error TS2322: Type 'false | Element' is not assignable to type 'Element'.
+  Type 'boolean' is not assignable to type 'ReactElement<any, any>'.
+client/src/components/layout/Header.tsx(42,23): error TS2339: Property 'name' does not exist on type 'AuthUser'.
+client/src/lib/3d/curved-modules.ts(43,5): error TS2820: Type '"walls"' is not assignable to type 'ModuleCategory'. Did you mean '"wall"'?
+client/src/lib/3d/curved-modules.ts(67,5): error TS2820: Type '"walls"' is not assignable to type 'ModuleCategory'. Did you mean '"wall"'?
+client/src/lib/3d/curved-modules.ts(91,5): error TS2820: Type '"walls"' is not assignable to type 'ModuleCategory'. Did you mean '"wall"'?
+client/src/lib/3d/curved-modules.ts(120,5): error TS2820: Type '"walls"' is not assignable to type 'ModuleCategory'. Did you mean '"wall"'?
+client/src/lib/3d/gltf-loader.ts(205,5): error TS2322: Type 'this' is not assignable to type 'Group<Object3DEventMap>'.
+  Property 'isGroup' is missing in type 'Object3D<TEventMap>' but required in type 'Group<Object3DEventMap>'.
+client/src/lib/3d/gltf-models.ts(65,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(85,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(105,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(125,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(145,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(171,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(193,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(213,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(233,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(253,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(279,5): error TS2741: Property 'dimensions' is missing in type '{ material: false; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(299,5): error TS2741: Property 'dimensions' is missing in type '{ material: false; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(319,5): error TS2741: Property 'dimensions' is missing in type '{ material: false; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(339,5): error TS2741: Property 'dimensions' is missing in type '{ material: false; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(359,5): error TS2741: Property 'dimensions' is missing in type '{ material: false; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(385,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(405,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(427,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(447,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(467,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(497,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(519,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(543,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(563,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(587,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(617,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(637,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(657,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(677,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(699,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(725,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(745,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(765,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(785,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(805,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(831,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(851,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(871,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(891,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(911,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(943,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(963,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(983,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(1003,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(1023,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(1049,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(1069,5): error TS2741: Property 'dimensions' is missing in type '{ material: false; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(1089,5): error TS2741: Property 'dimensions' is missing in type '{ material: false; color: false; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(1109,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/gltf-models.ts(1129,5): error TS2741: Property 'dimensions' is missing in type '{ material: true; color: true; }' but required in type '{ dimensions: boolean; material: boolean; color: boolean; }'.
+client/src/lib/3d/lighting-modules.ts(40,57): error TS2353: Object literal may only specify known properties, and 'emissive' does not exist in type 'ModuleMaterial'.
+client/src/lib/3d/lighting-modules.ts(66,7): error TS2353: Object literal may only specify known properties, and 'emissive' does not exist in type 'ModuleMaterial'.
+client/src/lib/3d/lighting-modules.ts(143,7): error TS2353: Object literal may only specify known properties, and 'emissive' does not exist in type 'ModuleMaterial'.
+client/src/lib/3d/lighting-modules.ts(244,7): error TS2353: Object literal may only specify known properties, and 'emissive' does not exist in type 'ModuleMaterial'.
+client/src/lib/3d/pbr-materials.ts(313,14): error TS2339: Property 'clearcoat' does not exist on type 'MeshStandardMaterial'.
+client/src/lib/3d/pbr-materials.ts(314,14): error TS2339: Property 'clearcoatRoughness' does not exist on type 'MeshStandardMaterial'.
+client/src/lib/3d/professional-templates.ts(34,27): error TS2353: Object literal may only specify known properties, and 'height' does not exist in type '{ width: number; depth: number; }'.
+client/src/lib/3d/professional-templates.ts(120,27): error TS2353: Object literal may only specify known properties, and 'height' does not exist in type '{ width: number; depth: number; }'.
+client/src/lib/3d/professional-templates.ts(172,27): error TS2353: Object literal may only specify known properties, and 'height' does not exist in type '{ width: number; depth: number; }'.
+client/src/lib/3d/professional-templates.ts(181,7): error TS2741: Property 'value' is missing in type '{ type: "certified"; certifiedMaterialId: string; }' but required in type 'ModuleMaterial'.
+client/src/lib/3d/professional-templates.ts(195,7): error TS2741: Property 'value' is missing in type '{ type: "certified"; certifiedMaterialId: string; }' but required in type 'ModuleMaterial'.
+client/src/lib/3d/texture-loader.ts(24,20): error TS2694: Namespace '"/home/user/stand/Stand-Planet/node_modules/@types/three/build/three.module"' has no exported member 'TextureEncoding'.
+client/src/lib/3d/texture-loader.ts(71,19): error TS2339: Property 'encoding' does not exist on type 'Texture<HTMLImageElement>'.
+client/src/lib/3d/texture-loader.ts(138,18): error TS2339: Property 'encoding' does not exist on type 'Texture<unknown>'.
+client/src/lib/3d/texture-loader.ts(138,35): error TS2339: Property 'sRGBEncoding' does not exist on type 'typeof import("/home/user/stand/Stand-Planet/node_modules/@types/three/build/three.module")'.
+client/src/lib/3d/texture-loader.ts(180,21): error TS2339: Property 'sRGBEncoding' does not exist on type 'typeof import("/home/user/stand/Stand-Planet/node_modules/@types/three/build/three.module")'.
+client/src/lib/exports/professional-exports.ts(102,30): error TS2802: Type 'MapIterator<[string, { modules: PlacedModule[]; count: number; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+server/db-sqlite.ts(2,22): error TS7016: Could not find a declaration file for module 'better-sqlite3'. '/home/user/stand/Stand-Planet/node_modules/better-sqlite3/lib/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/better-sqlite3` if it exists or add a new declaration (.d.ts) file containing `declare module 'better-sqlite3';`
+server/db.ts(2,22): error TS7016: Could not find a declaration file for module 'better-sqlite3'. '/home/user/stand/Stand-Planet/node_modules/better-sqlite3/lib/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/better-sqlite3` if it exists or add a new declaration (.d.ts) file containing `declare module 'better-sqlite3';`
+server/routes.ts(72,47): error TS2345: Argument of type '{ name: string; location: string; organizerId: number; startDate: Date; endDate: Date; description?: string | null | undefined; floorPlanJson?: Json | undefined; }' is not assignable to parameter of type '{ name: string; location: string; organizerId: number; startDate: Date; endDate: Date; description?: string | null | undefined; floorPlanJson?: string | null | undefined; }'.
+  Types of property 'floorPlanJson' are incompatible.
+    Type 'Json | undefined' is not assignable to type 'string | null | undefined'.
+      Type 'number' is not assignable to type 'string'.
+server/routes.ts(231,5): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+server/routes.ts(239,5): error TS2322: Type '{ x: number; y: number; }' is not assignable to type 'string'.
+server/routes.ts(242,5): error TS2322: Type '{ walls: never[]; furniture: never[]; }' is not assignable to type 'string'.
+server/routes.ts(249,5): error TS2322: Type '{ x: number; y: number; }' is not assignable to type 'string'.
+server/routes.ts(253,5): error TS2322: Type '{ walls: never[]; furniture: { type: string; x: number; y: number; }[]; }' is not assignable to type 'string'.
+server/supabase-storage.ts(128,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: { name: string | SQL<unknown> | Placeholder<string, any>; type: "video" | "image" | "texture" | SQL<unknown> | "logo" | "document" | Placeholder<string, any>; ... 13 more ...; updatedAt?: Date | ... 3 more ... | undefined; }): SQLiteInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, and 'size' does not exist in type '{ name: string | SQL<unknown> | Placeholder<string, any>; type: "video" | "image" | "texture" | SQL<unknown> | "logo" | "document" | Placeholder<string, any>; ... 13 more ...; updatedAt?: Date | ... 3 more ... | undefined; }'.
+  Overload 2 of 2, '(values: { name: string | SQL<unknown> | Placeholder<string, any>; type: "video" | "image" | "texture" | SQL<unknown> | "logo" | "document" | Placeholder<string, any>; ... 13 more ...; updatedAt?: Date | ... 3 more ... | undefined; }[]): SQLiteInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, and 'userId' does not exist in type '{ name: string | SQL<unknown> | Placeholder<string, any>; type: "video" | "image" | "texture" | SQL<unknown> | "logo" | "document" | Placeholder<string, any>; ... 13 more ...; updatedAt?: Date | ... 3 more ... | undefined; }[]'.
+shared/schema-assets.ts(78,18): error TS2430: Interface 'AssetResponse' incorrectly extends interface '{ name: string; type: "video" | "image" | "texture" | "logo" | "document"; id: number; metadata: string | null; height: number | null; width: number | null; url: string; createdAt: Date | null; ... 7 more ...; updatedAt: Date | null; }'.
+  Types of property 'thumbnailUrl' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string | null'.
+      Type 'undefined' is not assignable to type 'string | null'.

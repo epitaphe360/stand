@@ -76,5 +76,5 @@ export interface AssetUploadRequest {
 }
 
 export interface AssetResponse extends Asset {
-  thumbnailUrl?: string;
+  // thumbnailUrl already exists in Asset
 }

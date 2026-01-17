@@ -268,12 +268,9 @@ function TemplateCard({
             ))}
           </div>
           {template.features.length > 4 && (
-            <button
-              className="text-xs text-blue-600 hover:underline mt-1"
-              onClick={() => console.log(template.features)}
-            >
-              Voir les {template.features.length - 4} caractéristiques supplémentaires
-            </button>
+            <p className="text-xs text-gray-500 mt-1">
+              +{template.features.length - 4} caractéristiques supplémentaires
+            </p>
           )}
         </div>
 

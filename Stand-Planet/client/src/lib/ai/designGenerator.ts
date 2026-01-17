@@ -118,20 +118,56 @@ async function generateVariations(
   baseConfig: StandConfiguration,
   apiKey: string
 ): Promise<StandConfiguration[]> {
-  // Pour simplifier, on crée des variations basiques
-  // Dans une vraie implémentation, on appellerait l'IA pour chaque variation
-  
-  const variation1 = {
+  // Variation 1: Version minimaliste (moins de modules)
+  const variation1: StandConfiguration = {
     ...baseConfig,
-    name: baseConfig.name + ' - Variation A',
-    backgroundColor: '#fafafa'
+    name: baseConfig.name + ' - Version Minimaliste',
+    description: 'Version épurée et minimaliste du design',
+    modules: baseConfig.modules.filter((_, index) => index % 2 === 0), // Garder 1 module sur 2
+    backgroundColor: '#fafafa',
+    floorMaterial: { type: 'color', value: '#ffffff' },
+    style: 'minimal'
   };
 
-  const variation2 = {
+  // Recalculer le prix
+  variation1.totalPrice = variation1.modules.reduce((sum, m) => sum + m.price, 0);
+
+  // Variation 2: Version enrichie (dupliquer certains éléments)
+  const enrichedModules = [...baseConfig.modules];
+
+  // Ajouter des modules de décoration supplémentaires
+  const decoModule = baseConfig.modules.find(m => m.id.startsWith('deco-'));
+  if (decoModule && baseConfig.dimensions) {
+    const { width, depth } = baseConfig.dimensions;
+    enrichedModules.push({
+      ...decoModule,
+      instanceId: `${decoModule.id}-enriched-${Date.now()}`,
+      position: { x: -width/3, y: 0, z: depth/4 },
+      rotation: { x: 0, y: Math.PI / 4, z: 0 }
+    });
+  }
+
+  // Ajouter éclairage supplémentaire
+  const lightModule = baseConfig.modules.find(m => m.id.startsWith('light-'));
+  if (lightModule && baseConfig.dimensions) {
+    enrichedModules.push({
+      ...lightModule,
+      instanceId: `${lightModule.id}-enriched-${Date.now()}`,
+      position: { x: 0, y: 2.8, z: 0 }
+    });
+  }
+
+  const variation2: StandConfiguration = {
     ...baseConfig,
-    name: baseConfig.name + ' - Variation B',
-    backgroundColor: '#f0f0f0'
+    name: baseConfig.name + ' - Version Premium',
+    description: 'Version enrichie avec éclairage et décoration supplémentaires',
+    modules: enrichedModules,
+    backgroundColor: '#f0f0f0',
+    style: 'luxury'
   };
+
+  // Recalculer le prix
+  variation2.totalPrice = variation2.modules.reduce((sum, m) => sum + m.price, 0);
 
   return [variation1, variation2];
 }
@@ -139,17 +175,113 @@ async function generateVariations(
 // Design par défaut si l'IA échoue
 function getDefaultDesign(request: AIGenerationRequest): StandConfiguration {
   const dimensions = request.dimensions || { width: 6, depth: 3 };
-  
+  const { width, depth } = dimensions;
+
+  // Créer une configuration de base fonctionnelle avec des modules réels
+  const placedModules: PlacedModule[] = [];
+
+  // Structure de base
+  const baseModule = getModuleById('struct-002');
+  if (baseModule) {
+    placedModules.push({
+      ...baseModule,
+      instanceId: `struct-002-${Date.now()}-0`,
+      position: { x: 0, y: 0, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+      material: baseModule.defaultMaterial,
+      isSelected: false,
+      isLocked: false
+    });
+  }
+
+  // Mur arrière
+  const wallModule = getModuleById('wall-001');
+  if (wallModule) {
+    placedModules.push({
+      ...wallModule,
+      instanceId: `wall-001-${Date.now()}-1`,
+      position: { x: 0, y: 0, z: -depth/2 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+      material: { type: 'color', value: '#ffffff' },
+      isSelected: false,
+      isLocked: false
+    });
+  }
+
+  // Comptoir d'accueil
+  const counterModule = getModuleById('furn-001');
+  if (counterModule) {
+    placedModules.push({
+      ...counterModule,
+      instanceId: `furn-001-${Date.now()}-2`,
+      position: { x: -width/4, y: 0, z: depth/4 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+      material: counterModule.defaultMaterial,
+      isSelected: false,
+      isLocked: false
+    });
+  }
+
+  // Éclairage spots
+  const lightModule = getModuleById('light-001');
+  if (lightModule) {
+    // Spot 1
+    placedModules.push({
+      ...lightModule,
+      instanceId: `light-001-${Date.now()}-3`,
+      position: { x: -width/3, y: 2.5, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+      material: lightModule.defaultMaterial,
+      isSelected: false,
+      isLocked: false
+    });
+
+    // Spot 2
+    placedModules.push({
+      ...lightModule,
+      instanceId: `light-001-${Date.now()}-4`,
+      position: { x: width/3, y: 2.5, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+      material: lightModule.defaultMaterial,
+      isSelected: false,
+      isLocked: false
+    });
+  }
+
+  // Plante décorative
+  const plantModule = getModuleById('deco-006');
+  if (plantModule) {
+    placedModules.push({
+      ...plantModule,
+      instanceId: `deco-006-${Date.now()}-5`,
+      position: { x: width/3, y: 0, z: -depth/3 },
+      rotation: { x: 0, y: 0, z: 0 },
+      scale: { x: 1, y: 1, z: 1 },
+      material: plantModule.defaultMaterial,
+      isSelected: false,
+      isLocked: false
+    });
+  }
+
+  const totalPrice = placedModules.reduce((sum, m) => sum + m.price, 0);
+
   return {
     name: 'Stand Standard',
-    description: 'Configuration de base pour votre stand',
+    description: 'Configuration de base professionnelle avec structure, comptoir d\'accueil, éclairage et décoration. Un excellent point de départ pour votre stand.',
     dimensions,
-    modules: [],
+    modules: placedModules,
     backgroundColor: '#f5f5f5',
     floorMaterial: { type: 'color', value: '#e8e8e8' },
-    style: 'modern',
+    style: request.style as any || 'modern',
     industry: request.industry,
-    totalPrice: 0
+    totalPrice,
+    createdAt: new Date(),
+    updatedAt: new Date()
   };
 }
 

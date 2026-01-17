@@ -80,51 +80,53 @@ export function PostProcessingEffects() {
 
   return (
     <EffectComposer>
-      {/* Bloom - Lueur autour des lumières */}
-      {settings.bloom.enabled && (
-        <Bloom
-          intensity={settings.bloom.intensity}
-          luminanceThreshold={settings.bloom.luminanceThreshold}
-          luminanceSmoothing={settings.bloom.luminanceSmoothing}
-          blendFunction={BlendFunction.SCREEN}
-        />
-      )}
+      <>
+        {/* Bloom - Lueur autour des lumières */}
+        {settings.bloom.enabled ? (
+          <Bloom
+            intensity={settings.bloom.intensity}
+            luminanceThreshold={settings.bloom.luminanceThreshold}
+            luminanceSmoothing={settings.bloom.luminanceSmoothing}
+            blendFunction={BlendFunction.SCREEN}
+          />
+        ) : null}
 
-      {/* SSAO - Ambient Occlusion pour ombres douces */}
-      {settings.ssao.enabled && (
-        <SSAO
-          intensity={settings.ssao.intensity}
-          radius={settings.ssao.radius}
-          samples={settings.ssao.samples}
-          blendFunction={BlendFunction.MULTIPLY}
-        />
-      )}
+        {/* SSAO - Ambient Occlusion pour ombres douces */}
+        {settings.ssao.enabled ? (
+          <SSAO
+            intensity={settings.ssao.intensity}
+            radius={settings.ssao.radius}
+            samples={settings.ssao.samples}
+            blendFunction={BlendFunction.MULTIPLY}
+          />
+        ) : null}
 
-      {/* Depth of Field - Profondeur de champ (optionnel) */}
-      {settings.dof.enabled && (
-        <DepthOfField
-          focusDistance={settings.dof.focusDistance}
-          focalLength={settings.dof.focalLength}
-          bokehScale={settings.dof.bokehScale}
-        />
-      )}
+        {/* Depth of Field - Profondeur de champ (optionnel) */}
+        {settings.dof.enabled ? (
+          <DepthOfField
+            focusDistance={settings.dof.focusDistance}
+            focalLength={settings.dof.focalLength}
+            bokehScale={settings.dof.bokehScale}
+          />
+        ) : null}
 
-      {/* Chromatic Aberration - Aberration chromatique subtile (optionnel) */}
-      {settings.chromaticAberration.enabled && (
-        <ChromaticAberration
-          offset={[settings.chromaticAberration.offset, settings.chromaticAberration.offset]}
-          blendFunction={BlendFunction.NORMAL}
-        />
-      )}
+        {/* Chromatic Aberration - Aberration chromatique subtile (optionnel) */}
+        {settings.chromaticAberration.enabled ? (
+          <ChromaticAberration
+            offset={[settings.chromaticAberration.offset, settings.chromaticAberration.offset]}
+            blendFunction={BlendFunction.NORMAL}
+          />
+        ) : null}
 
-      {/* Vignette - Assombrissement des bords */}
-      {settings.vignette.enabled && (
-        <Vignette
-          darkness={settings.vignette.darkness}
-          offset={settings.vignette.offset}
-          blendFunction={BlendFunction.NORMAL}
-        />
-      )}
+        {/* Vignette - Assombrissement des bords */}
+        {settings.vignette.enabled ? (
+          <Vignette
+            darkness={settings.vignette.darkness}
+            offset={settings.vignette.offset}
+            blendFunction={BlendFunction.NORMAL}
+          />
+        ) : null}
+      </>
     </EffectComposer>
   );
 }

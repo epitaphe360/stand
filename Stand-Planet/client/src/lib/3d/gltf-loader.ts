@@ -137,7 +137,7 @@ export async function loadGLTFModel(options: GLTFLoadOptions): Promise<LoadedGLT
   const gltf = await modelCache.get(url)!;
 
   // Cloner la scène pour éviter les modifications du cache
-  const scene = gltf.scene.clone(true);
+  const scene = gltf.scene.clone(true) as unknown as THREE.Group;
 
   // Appliquer les overrides de matériaux
   if (materialOverrides) {

@@ -31,13 +31,15 @@ export default function DragDropCanvas() {
 
   return (
     <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 relative">
-      <VRButton />
-      <Canvas 
-        shadows={!isMobile} 
-        dpr={isMobile ? 1 : [1, 2]} 
+      {/* TODO: VR/XR support needs proper store configuration */}
+      {/* <VRButton /> */}
+      <Canvas
+        shadows={!isMobile}
+        dpr={isMobile ? 1 : [1, 2]}
         gl={{ antialias: !isMobile, alpha: false }}
       >
-        <XR>
+        {/* TODO: XR needs store prop from createXRStore() */}
+        {/* <XR> */}
           <Suspense fallback={null}>
           {/* Caméra */}
           <PerspectiveCamera makeDefault position={[8, 6, 8]} fov={50} />
@@ -128,12 +130,11 @@ export default function DragDropCanvas() {
 
           {/* Post-Processing optimisé (désactivé sur mobile pour fluidité) */}
           {!isMobile && (
-            <EffectComposer disableNormalPass>
-              <SSAO 
+            <EffectComposer>
+              <SSAO
                 intensity={1.5}
                 radius={0.4}
                 luminanceInfluence={0.5}
-                color="black"
               />
               <Bloom 
                 intensity={0.5}
@@ -152,7 +153,7 @@ export default function DragDropCanvas() {
             </EffectComposer>
           )}
         </Suspense>
-        </XR>
+        {/* </XR> */}
       </Canvas>
 
       {/* Overlay d'informations */}

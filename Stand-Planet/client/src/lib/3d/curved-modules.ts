@@ -40,7 +40,7 @@ export const CURVED_MODULES: ModuleBase[] = [
   {
     id: 'curve-001',
     name: 'Mur Courbe Arc 180°',
-    category: 'walls',
+    category: 'wall',
     description: 'Mur incurvé semi-circulaire de 3m de rayon',
     thumbnailUrl: '/modules/curves/curved-wall-180.png',
     dimensions: { width: 6, height: 2.5, depth: 3 },
@@ -64,7 +64,7 @@ export const CURVED_MODULES: ModuleBase[] = [
   {
     id: 'curve-002',
     name: 'Mur Courbe Arc 90°',
-    category: 'walls',
+    category: 'wall',
     description: 'Mur d\'angle courbe quart de cercle',
     thumbnailUrl: '/modules/curves/curved-wall-90.png',
     dimensions: { width: 3, height: 2.5, depth: 3 },
@@ -88,7 +88,7 @@ export const CURVED_MODULES: ModuleBase[] = [
   {
     id: 'curve-003',
     name: 'Mur Courbe Serpentin',
-    category: 'walls',
+    category: 'wall',
     description: 'Mur en forme de S (courbe de Bézier)',
     thumbnailUrl: '/modules/curves/curved-wall-s.png',
     dimensions: { width: 6, height: 2.5, depth: 2 },
@@ -117,7 +117,7 @@ export const CURVED_MODULES: ModuleBase[] = [
   {
     id: 'curve-004',
     name: 'Mur Circulaire Complet',
-    category: 'walls',
+    category: 'wall',
     description: 'Mur circulaire fermé (stand îlot)',
     thumbnailUrl: '/modules/curves/curved-wall-360.png',
     dimensions: { width: 4, height: 2.5, depth: 4 },

@@ -36,6 +36,14 @@ export type ModuleMaterial = {
   metalness?: number;
   roughness?: number;
   opacity?: number;
+  // Propriétés émissives (pour lumières)
+  emissive?: string;
+  emissiveIntensity?: number;
+  // Transparence
+  transparent?: boolean;
+  // Clearcoat (vernis brillant)
+  clearcoat?: number;
+  clearcoatRoughness?: number;
 };
 
 export interface ModuleDimensions {
@@ -221,6 +229,19 @@ export interface StandConfiguration {
   style?: 'modern' | 'luxury' | 'industrial' | 'minimal' | 'creative';
   industry?: string;
   totalPrice?: number;
+  tags?: string[];
+  estimatedPrice?: number;
+  carbonFootprint?: number;
+  metadata?: {
+    style?: string;
+    targetSectors?: string[];
+    difficulty?: string;
+    setupTime?: string;
+    requiredCrew?: number;
+    specialFeatures?: string[];
+    electricalNeeds?: string;
+    certifications?: string[];
+  };
 }
 
 export interface ModuleTemplate {

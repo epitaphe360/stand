@@ -6,6 +6,7 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { insertUserSchema } from "@shared/schema-sqlite";
+import { requireAuth, optionalAuth } from "./auth-middleware";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -17,20 +18,31 @@ export async function registerRoutes(
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // === Auth (Mock/Simple) ===
-  // In a real scenario, use Replit Auth or Supabase Auth.
-  // Here we provide endpoints that match the client's expectation for a custom auth flow or mock.
+  // === Auth ===
+  // SYSTÈME HYBRIDE: Supporte Supabase Auth ET auth basique (fallback)
+  // - Avec Supabase: Client utilise supabase.auth.* directement
+  // - Sans Supabase: Client utilise ces routes + session basique
 
   app.post(api.auth.login.path, async (req, res) => {
     try {
       const { username, password } = api.auth.login.input.parse(req.body);
-      // Simple mock check or DB check
+
+      // Check dans la base locale (SQLite)
       const user = await storage.getUserByUsername(username);
+
       if (!user || user.password !== password) {
-         return res.status(401).json({ message: "Invalid credentials" });
+        return res.status(401).json({ message: "Invalid credentials" });
       }
-      // In a real app, set session/cookie here
-      res.json(user);
+
+      // En production avec Supabase, ce endpoint ne sera pas utilisé
+      // Le client utilisera supabase.auth.signInWithPassword() directement
+      res.json({
+        id: user.id,
+        email: user.email,
+        username: user.email,
+        fullName: user.name,
+        role: user.role
+      });
     } catch (e) {
       res.status(400).json({ message: "Invalid input" });
     }
@@ -39,12 +51,23 @@ export async function registerRoutes(
   app.post(api.auth.register.path, async (req, res) => {
     try {
       const input = api.auth.register.input.parse(req.body);
+
+      // Check si email existe déjà
       const existing = await storage.getUserByEmail(input.email);
       if (existing) {
         return res.status(400).json({ message: "Email already exists" });
       }
+
+      // Créer l'utilisateur dans SQLite
       const user = await storage.createUser(input);
-      res.status(201).json(user);
+
+      res.status(201).json({
+        id: user.id,
+        email: user.email,
+        username: user.email,
+        fullName: user.name,
+        role: user.role
+      });
     } catch (e) {
       if (e instanceof z.ZodError) {
         return res.status(400).json({ message: e.errors[0].message });
@@ -52,30 +75,36 @@ export async function registerRoutes(
       res.status(500).json({ message: "Internal Server Error" });
     }
   });
-  
+
   app.get(api.auth.me.path, async (req, res) => {
-    // Mock: return 401 as we don't have session persistence in this simple scaffolding
-    // The client should handle this by showing login
-    res.status(401).json({ message: "Not authenticated" });
+    // Sans système de session, on ne peut pas implémenter /me
+    // Le client doit stocker l'utilisateur en localStorage
+    // OU utiliser Supabase qui gère les sessions
+    res.status(501).json({
+      message: "Not implemented. Use Supabase Auth or client-side session management."
+    });
   });
 
   app.post(api.auth.logout.path, (req, res) => {
-    res.json({});
+    // Pas de session côté serveur = pas besoin de logout serveur
+    res.json({ message: "Logged out successfully" });
   });
 
   // === Events ===
-  app.get(api.events.list.path, async (req, res) => {
+  // GET public (optionalAuth = peut être authentifié ou non)
+  app.get(api.events.list.path, optionalAuth, async (req, res) => {
     const events = await storage.getEvents();
     res.json(events);
   });
 
-  app.get(api.events.get.path, async (req, res) => {
+  app.get(api.events.get.path, optionalAuth, async (req, res) => {
     const event = await storage.getEvent(Number(req.params.id));
     if (!event) return res.status(404).json({ message: "Event not found" });
     res.json(event);
   });
 
-  app.post(api.events.create.path, async (req, res) => {
+  // POST requires authentication
+  app.post(api.events.create.path, requireAuth, async (req, res) => {
     try {
       const input = api.events.create.input.parse(req.body);
       const event = await storage.createEvent(input);
@@ -86,18 +115,20 @@ export async function registerRoutes(
   });
 
   // === Booths ===
-  app.get(api.booths.list.path, async (req, res) => {
+  // GET public
+  app.get(api.booths.list.path, optionalAuth, async (req, res) => {
     const booths = await storage.getBoothsByEvent(Number(req.params.eventId));
     res.json(booths);
   });
 
-  app.get(api.booths.get.path, async (req, res) => {
+  app.get(api.booths.get.path, optionalAuth, async (req, res) => {
     const booth = await storage.getBooth(Number(req.params.id));
     if (!booth) return res.status(404).json({ message: "Booth not found" });
     res.json(booth);
   });
 
-  app.patch(api.booths.updateConfig.path, async (req, res) => {
+  // PATCH requires authentication
+  app.patch(api.booths.updateConfig.path, requireAuth, async (req, res) => {
     try {
       const { configurationJson } = api.booths.updateConfig.input.parse(req.body);
       const booth = await storage.updateBoothConfig(Number(req.params.id), configurationJson);
@@ -108,7 +139,8 @@ export async function registerRoutes(
   });
 
   // === Orders ===
-  app.post(api.orders.create.path, async (req, res) => {
+  // POST requires authentication
+  app.post(api.orders.create.path, requireAuth, async (req, res) => {
     try {
       const input = api.orders.create.input.parse(req.body);
       const order = await storage.createOrder(input);
@@ -119,17 +151,19 @@ export async function registerRoutes(
   });
 
   // === Assets / Uploads ===
-  const { upload, handleAssetUpload, getUserAssets, deleteAsset } = await import("./uploads");
+  // MIGRATION SUPABASE: Utilise Supabase Storage au lieu du stockage local
+  const { upload, handleAssetUpload, getUserAssets, deleteAsset } = await import("./supabase-storage");
 
-  app.post("/api/assets/upload", upload.single("file"), handleAssetUpload);
+  // POST/DELETE require authentication
+  app.post("/api/assets/upload", requireAuth, upload.single("file"), handleAssetUpload);
 
-  app.get("/api/assets", getUserAssets);
+  app.get("/api/assets", requireAuth, getUserAssets);
 
-  app.delete("/api/assets/:id", deleteAsset);
+  app.delete("/api/assets/:id", requireAuth, deleteAsset);
 
   // === Module Assets (Branding) ===
   // Récupérer les assets appliqués à un module
-  app.get("/api/booths/:boothId/modules/:moduleInstanceId/assets", async (req, res) => {
+  app.get("/api/booths/:boothId/modules/:moduleInstanceId/assets", optionalAuth, async (req, res) => {
     try {
       const { boothId, moduleInstanceId } = req.params;
       const { db } = await import("./db");
@@ -151,8 +185,8 @@ export async function registerRoutes(
     }
   });
 
-  // Appliquer un asset à un module
-  app.post("/api/booths/:boothId/modules/:moduleInstanceId/assets", async (req, res) => {
+  // Appliquer un asset à un module (requires authentication)
+  app.post("/api/booths/:boothId/modules/:moduleInstanceId/assets", requireAuth, async (req, res) => {
     try {
       const { boothId, moduleInstanceId } = req.params;
       const { assetId, face, position, opacity, repeat } = req.body;
@@ -175,8 +209,8 @@ export async function registerRoutes(
     }
   });
 
-  // Supprimer un asset d'un module
-  app.delete("/api/booths/:boothId/modules/:moduleInstanceId/assets/:id", async (req, res) => {
+  // Supprimer un asset d'un module (requires authentication)
+  app.delete("/api/booths/:boothId/modules/:moduleInstanceId/assets/:id", requireAuth, async (req, res) => {
     try {
       const { id } = req.params;
       const { db } = await import("./db");
@@ -232,7 +266,7 @@ async function seed() {
     location: "Paris Convention Center",
     startDate: new Date("2024-06-15"),
     endDate: new Date("2024-06-18"),
-    floorPlanJson: { width: 50, height: 30 } // Simple mock dimensions
+    floorPlanJson: JSON.stringify({ width: 50, height: 30 }) // Simple mock dimensions
   });
 
   // Create Booths
@@ -240,21 +274,21 @@ async function seed() {
     eventId: event.id,
     number: "A1",
     dimensions: "3x3",
-    position: { x: 10, y: 10 },
+    position: JSON.stringify({ x: 10, y: 10 }),
     status: "available",
     price: 150000, // $1500.00
-    configurationJson: { walls: [], furniture: [] }
+    configurationJson: JSON.stringify({ walls: [], furniture: [] })
   });
 
   await storage.createBooth({
     eventId: event.id,
     number: "A2",
     dimensions: "6x3",
-    position: { x: 20, y: 10 },
+    position: JSON.stringify({ x: 20, y: 10 }),
     status: "reserved",
     exhibitorId: exhibitor.id,
     price: 250000,
-    configurationJson: { walls: [], furniture: [{ type: "desk", x: 1, y: 1 }] }
+    configurationJson: JSON.stringify({ walls: [], furniture: [{ type: "desk", x: 1, y: 1 }] })
   });
 
   console.log("Seeding complete.");

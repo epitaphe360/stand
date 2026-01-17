@@ -277,7 +277,7 @@ export const PBR_MATERIALS: Record<string, PBRMaterialConfig> = {
 export function createPBRMaterial(
   configOrName: PBRMaterialConfig | string,
   overrides?: Partial<PBRMaterialConfig>
-): THREE.MeshStandardMaterial {
+): THREE.MeshPhysicalMaterial {
   // Récupérer la config
   let config: PBRMaterialConfig;
   if (typeof configOrName === 'string') {
@@ -296,7 +296,7 @@ export function createPBRMaterial(
   }
 
   // Créer le matériau
-  const material = new THREE.MeshStandardMaterial({
+  const material = new THREE.MeshPhysicalMaterial({
     color: new THREE.Color(config.baseColor),
     metalness: config.metalness,
     roughness: config.roughness,
