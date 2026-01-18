@@ -1,6 +1,26 @@
+# Environment variables (contains sensitive credentials)
+.env
+.env.local
+.env.production
+
+# Dependencies
 node_modules
+
+# Build outputs
 dist
+
+# Logs
+*.log
+
+# OS
 .DS_Store
+
+# Server
 server/public
+
+# Config
 vite.config.ts.*
-*.tar.gz*.db
+
+# Database
+*.db
+*.tar.gz

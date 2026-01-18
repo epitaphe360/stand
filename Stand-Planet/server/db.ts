@@ -1,28 +1,63 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
-import * as schema from "@shared/schema-sqlite";
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import * as schema from "@shared/schema-postgres";
+import { config } from "dotenv";
 
-// Utilise SQLite pour le développement local
-const dbPath = process.env.DATABASE_PATH || "./standplanet.db";
+// Load environment variables
+config();
 
-// Créer la base de données si elle n'existe pas
-if (!existsSync(dbPath)) {
-  console.log("Création de la base de données SQLite...");
-  writeFileSync(dbPath, "");
+// Configuration PostgreSQL pour epitaphev1
+const DATABASE_URL = process.env.DATABASE_URL;
+
+if (!DATABASE_URL) {
+  throw new Error(
+    "DATABASE_URL environment variable is required. " +
+    "Please configure .env with epitaphev1 credentials."
+  );
 }
 
-const sqlite = new Database(dbPath);
+// Create PostgreSQL connection pool
+export const pool = new Pool({
+  connectionString: DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  max: 20, // Maximum connections in pool
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
+});
 
-// Activer les foreign keys dans SQLite
-sqlite.pragma("foreign_keys = ON");
+// Log connection status
+pool.on('connect', () => {
+  console.log('✅ Connected to epitaphev1 PostgreSQL database');
+});
 
-export const db = drizzle(sqlite, { schema });
+pool.on('error', (err) => {
+  console.error('❌ PostgreSQL pool error:', err);
+});
 
-// Pour compatibilité avec l'ancien code PostgreSQL
-export const pool = {
-  query: async (...args: any[]) => {
-    console.warn("pool.query appelé mais non implémenté pour SQLite");
-    return { rows: [] };
+// Initialize Drizzle ORM with PostgreSQL
+export const db = drizzle(pool, { schema });
+
+// Health check function
+export async function checkDatabaseConnection(): Promise<boolean> {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    console.log('✅ Database health check passed:', result.rows[0]);
+    return true;
+  } catch (error) {
+    console.error('❌ Database health check failed:', error);
+    return false;
   }
-};
+}
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('\n🔌 Closing PostgreSQL connection pool...');
+  await pool.end();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.log('\n🔌 Closing PostgreSQL connection pool...');
+  await pool.end();
+  process.exit(0);
+});
